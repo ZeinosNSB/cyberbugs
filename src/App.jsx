@@ -1,5 +1,15 @@
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import LoginRegister from './page/Login/LoginRegister'
+
 function App() {
-  return <main className='App'></main>
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path='/home' element={<h1>Home</h1>} />
+        <Route path='/' element={<LoginRegister />} />
+      </Routes>
+    </BrowserRouter>
+  )
 }
 
 export default App
