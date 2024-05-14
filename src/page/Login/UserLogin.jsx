@@ -1,6 +1,23 @@
-import { Button, Checkbox, Col, Form, Grid, Input, Row, theme, Typography } from 'antd'
+import {
+  Button,
+  Checkbox,
+  Col,
+  Divider,
+  Form,
+  Grid,
+  Input,
+  Row,
+  Space,
+  theme,
+  Typography
+} from 'antd'
 
-import { LockOutlined, MailOutlined } from '@ant-design/icons'
+import {
+  FacebookFilled,
+  GoogleCircleFilled,
+  LockOutlined,
+  MailOutlined
+} from '@ant-design/icons'
 
 const { useToken } = theme
 const { useBreakpoint } = Grid
@@ -24,27 +41,33 @@ export default function App() {
     },
     footer: {
       marginTop: token.marginLG,
+      textAlign: 'center',
       width: '100%'
     },
-    forgotPassword: {
-      float: 'right'
-    },
     header: {
-      marginBottom: token.marginXL
+      marginBottom: token.marginXL,
+      textAlign: 'center'
     },
     section: {
       alignItems: 'center',
       backgroundColor: token.colorBgContainer,
       display: 'flex',
       height: screens.sm ? '100vh' : 'auto',
-      padding: 0,
-      textAlign: 'center'
+      padding: 0
     },
-    text: {
-      color: token.colorTextSecondary
+    formForgot: {
+      float: 'right'
     },
     title: {
       fontSize: screens.md ? token.fontSizeHeading2 : token.fontSizeHeading3
+    },
+    logo: {
+      width: '80px',
+      height: '80px'
+    },
+    icon: {
+      textAlign: 'center',
+      marginTop: token.marginLG
     }
   }
 
@@ -54,21 +77,7 @@ export default function App() {
         <section style={styles.section}>
           <div style={styles.container}>
             <div style={styles.header}>
-              <svg
-                width='25'
-                height='24'
-                viewBox='0 0 25 24'
-                fill='none'
-                xmlns='http://www.w3.org/2000/svg'
-              >
-                <rect x='0.464294' width='24' height='24' rx='4.8' fill='#1890FF' />
-                <path d='M14.8643 3.6001H20.8643V9.6001H14.8643V3.6001Z' fill='white' />
-                <path d='M10.0643 9.6001H14.8643V14.4001H10.0643V9.6001Z' fill='white' />
-                <path
-                  d='M4.06427 13.2001H11.2643V20.4001H4.06427V13.2001Z'
-                  fill='white'
-                />
-              </svg>
+              <img style={styles.logo} src='./img/logo.png' alt='Logo' />
 
               <Title style={styles.title}>Sign in</Title>
               <Text style={styles.text}>
@@ -115,17 +124,24 @@ export default function App() {
                 <Form.Item name='remember' valuePropName='checked' noStyle>
                   <Checkbox>Remember me</Checkbox>
                 </Form.Item>
-                <a style={styles.forgotPassword} href=''>
+                <Link href='' style={styles.formForgot}>
                   Forgot password?
-                </a>
+                </Link>
               </Form.Item>
               <Form.Item style={{ marginBottom: '0px' }}>
                 <Button block='true' type='primary' htmlType='submit'>
                   Log in
                 </Button>
+                <Divider plain>Or continue with</Divider>
                 <div style={styles.footer}>
                   <Text style={styles.text}>Don&apos;t have an account?</Text>
                   <Link href=''>Sign up now</Link>
+                </div>
+                <div style={styles.icon}>
+                  <Space>
+                    <Button type='primary' shape='circle' icon={<FacebookFilled />} />
+                    <Button type='primary' shape='circle' icon={<GoogleCircleFilled />} />
+                  </Space>
                 </div>
               </Form.Item>
             </Form>

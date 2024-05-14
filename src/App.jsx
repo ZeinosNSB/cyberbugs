@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import LoginRegister from './page/Login/LoginRegister'
+import LoginRegister from './page/Login/UserLogin'
 
 function App() {
   return (
