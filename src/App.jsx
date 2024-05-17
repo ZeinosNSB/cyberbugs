@@ -1,12 +1,19 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import LoginRegister from './page/Login/UserLogin'
+import UsersSignTemplate from './template/UsersSignTemplate'
+import UserSignIn from './page/UserSignIn'
+import PageNotFound from './page/PageNotFound'
+import Home from './page/Home'
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/home' element={<h1>Home</h1>} />
-        <Route path='/' element={<LoginRegister />} />
+        <Route path='/' element={<Home />} />
+        <Route element={<UsersSignTemplate />}>
+          <Route path='signin' element={<UserSignIn />} />
+          <Route path='signup' element={<h1>Register</h1>} />
+        </Route>
+        <Route path='*' element={<PageNotFound />} />
       </Routes>
     </BrowserRouter>
   )
