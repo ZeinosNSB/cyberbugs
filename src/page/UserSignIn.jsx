@@ -1,19 +1,20 @@
-import { Button, Checkbox, Divider, Form, Input, Space, Typography } from 'antd'
 import {
   FacebookFilled,
   GoogleCircleFilled,
   LockOutlined,
   UserOutlined
 } from '@ant-design/icons'
-import { UserSignInStyles } from '../styles/UserSignInStyles'
-import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { Button, Checkbox, Divider, Form, Input, Space, Typography } from 'antd'
 import { useForm } from 'react-hook-form'
-import { FormItem } from '../components/FormItem'
 import { useDispatch } from 'react-redux'
-import { setUserSignIn, usersSignIn } from '../store/reducer/usersSlice'
-import { TOKEN } from '../utils/settingSystems'
 import { useNavigate } from 'react-router-dom'
+import * as yup from 'yup'
+
+import { FormItem } from '../components/FormItem'
+import { setUserSignIn, usersSignIn } from '../store/reducer/usersSlice'
+import { UserSignInStyles } from '../styles/UserSignInStyles'
+import { TOKEN } from '../utils/settingSystems'
 
 const { Text, Title, Link } = Typography
 

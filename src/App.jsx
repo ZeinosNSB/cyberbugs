@@ -1,8 +1,11 @@
+import './App.css'
+
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import UsersSignTemplate from './template/UsersSignTemplate'
-import UserSignIn from './page/UserSignIn'
-import PageNotFound from './page/PageNotFound'
+
 import Home from './page/Home'
+import PageNotFound from './page/PageNotFound'
+import UserSignIn from './page/UserSignIn'
+import UsersSignTemplate from './template/UsersSignTemplate'
 
 function App() {
   return (
