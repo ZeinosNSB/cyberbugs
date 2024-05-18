@@ -1,19 +1,57 @@
-import { UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons'
-import { Breadcrumb, Layout, Menu, theme } from 'antd'
+import { Breadcrumb, Layout, Menu } from 'antd'
 import { useState } from 'react'
+import { Outlet } from 'react-router-dom'
 
 import SideBar from '../components/SideBar'
+import { useTheme } from '../hooks/useTheme'
 
 const { Sider, Content } = Layout
 
+const menuItems = [
+  {
+    key: '1',
+    icon: <i className='fa fa-credit-card'></i>,
+    label: 'Cyber Board'
+  },
+  {
+    key: '2',
+    icon: <i className='fa fa-cog'></i>,
+    label: 'Project Settings'
+  },
+  {
+    type: 'divider'
+  },
+  {
+    key: '3',
+    icon: <i className='fa fa-truck'></i>,
+    label: 'Releases'
+  },
+  {
+    key: '4',
+    icon: <i className='fa fa-equals'></i>,
+    label: 'Issues and filters'
+  },
+  {
+    key: '5',
+    icon: <i className='fa fa-paste'></i>,
+    label: 'Pages'
+  },
+  {
+    key: '6',
+    icon: <i className='fa fa-location-arrow'></i>,
+    label: 'Reports'
+  },
+  {
+    key: '7',
+    icon: <i className='fa fa-box'></i>,
+    label: 'Components'
+  }
+]
+
 function CyberBugsTemplate() {
   const [collapsed, setCollapsed] = useState(true)
-  const {
-    token: { colorBgContainer, borderRadiusLG }
-  } = theme.useToken()
-  const toggle = () => {
-    setCollapsed(!collapsed)
-  }
+  const { token } = useTheme()
+  const toggle = () => setCollapsed(!collapsed)
   return (
     <div className='h-screen font-normal flex'>
       <Layout>
@@ -21,7 +59,7 @@ function CyberBugsTemplate() {
           <SideBar />
         </Sider>
         <Sider width={250} collapsible collapsed={collapsed} onCollapse={toggle}>
-          <div className='py-5 flex justify-around'>
+          <div className='py-5 flex justify-evenly'>
             <img
               className='w-14 h-auto rounded-full cursor-pointer'
               src='./img/download.jfif'
@@ -38,44 +76,27 @@ function CyberBugsTemplate() {
             style={{ borderInlineEnd: 'none' }}
             mode='inline'
             defaultSelectedKeys={['1']}
-            items={[
-              {
-                key: '1',
-                icon: <UserOutlined />,
-                label: 'nav 1'
-              },
-              {
-                key: '2',
-                icon: <VideoCameraOutlined />,
-                label: 'nav 2'
-              },
-              {
-                key: '3',
-                icon: <UploadOutlined />,
-                label: 'nav 3'
-              }
-            ]}
+            items={menuItems}
           />
         </Sider>
         <Layout>
           <Content
             style={{
-              margin: '24px 16px',
+              margin: '16px',
               padding: 24,
               minHeight: 280,
-              background: colorBgContainer,
-              borderRadius: borderRadiusLG
+              background: token.colorBgContainer,
+              borderRadius: token.borderRadiusLG
             }}
           >
-            <Breadcrumb>
-              <Breadcrumb.Item>User</Breadcrumb.Item>
-              <Breadcrumb.Item>Bill</Breadcrumb.Item>
-            </Breadcrumb>
-            <div>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. A amet assumenda
-              commodi corporis cum, delectus dolores eaque est in ipsam nostrum placeat
-              quae quia quisquam tempora tempore, vel vero voluptates.
-            </div>
+            <Breadcrumb
+              items={[
+                { href: '', title: 'Project' },
+                { href: '', title: 'CyberLearn' },
+                { title: 'Cyber Board' }
+              ]}
+            />
+            <Outlet />
           </Content>
         </Layout>
       </Layout>

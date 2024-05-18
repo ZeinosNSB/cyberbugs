@@ -16,7 +16,7 @@ function App() {
           <Route path='signup' element={<h1>Register</h1>} />
         </Route>
         <Route element={<CyberBugsTemplate />}>
-          <Route path='cyberbugs' element={<h1></h1>} />
+          <Route index path='cyberbugs' element={<h1>Ronaldo</h1>} />
         </Route>
         <Route path='*' element={<PageNotFound />} />
       </Routes>
