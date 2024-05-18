@@ -4,5 +4,6 @@ const { colorPrimary } = colors
 
 export const token = {
   colorPrimary: colorPrimary,
-  colorLink: colorPrimary
+  colorLink: colorPrimary,
+  fontFamily: 'Noto Sans, sans-serif'
 }

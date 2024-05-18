@@ -4,5 +4,10 @@ export const components = {
     colorPrimaryHover: 'linear-gradient(135deg, #FFA12B, #9A2B16)',
     colorPrimaryActive: 'linear-gradient(135deg, #f28e2f, #e34d00)',
     lineWidth: 0
+  },
+  Layout: {
+    siderBg: '#fff',
+    triggerBg: '#fff',
+    triggerColor: '#E8713A'
   }
 }
