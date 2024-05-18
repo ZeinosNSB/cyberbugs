@@ -1,4 +1,4 @@
-import { useTheme } from '../hooks/useTheme'
+import { useTheme } from '../../hooks/useTheme'
 
 export const UserSignInStyles = () => {
   const { token, screens } = useTheme()
@@ -35,7 +35,8 @@ export const UserSignInStyles = () => {
     },
     logo: {
       width: '80px',
-      height: '80px'
+      height: '80px',
+      display: 'inline-block'
     },
     icon: {
       textAlign: 'center',

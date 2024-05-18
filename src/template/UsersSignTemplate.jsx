@@ -1,6 +1,6 @@
 import { Col, Row } from 'antd'
-import { Outlet } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+import { Outlet } from 'react-router-dom'
 
 const UsersSignTemplate = () => {
   const [size, setSize] = useState({

@@ -13,7 +13,7 @@ import * as yup from 'yup'
 
 import { FormItem } from '../components/FormItem'
 import { setUserSignIn, usersSignIn } from '../store/reducer/usersSlice'
-import { UserSignInStyles } from '../styles/UserSignInStyles'
+import { UserSignInStyles } from '../styles/js/UserSignInStyles'
 import { TOKEN } from '../utils/settingSystems'
 
 const { Text, Title, Link } = Typography
