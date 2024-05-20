@@ -1,5 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
+import CreateProject from './page/CreateProject'
+import CyberBoard from './page/CyberBoard'
 import Home from './page/Home'
 import PageNotFound from './page/PageNotFound'
 import UserSignIn from './page/UserSignIn'
@@ -16,7 +18,8 @@ function App() {
           <Route path='signup' element={<h1>Register</h1>} />
         </Route>
         <Route element={<CyberBugsTemplate />}>
-          <Route index path='cyberbugs' element={<h1>Ronaldo</h1>} />
+          <Route path='cyberbugs' element={<CyberBoard />} />
+          <Route path='create-project' element={<CreateProject />} />
         </Route>
         <Route path='*' element={<PageNotFound />} />
       </Routes>

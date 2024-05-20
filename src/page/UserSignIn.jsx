@@ -38,8 +38,8 @@ export default function UserSignIn() {
     try {
       const result = await dispatch(usersSignIn(values)).unwrap()
       console.log(result)
-      if (result.content.accessToken) {
-        localStorage.setItem(TOKEN, result.content.accessToken)
+      if (result?.content?.accessToken) {
+        localStorage.setItem(TOKEN, result?.content?.accessToken)
         localStorage.setItem('user_login', JSON.stringify(result.content))
         dispatch(setUserSignIn(result.content))
         navigate('/')

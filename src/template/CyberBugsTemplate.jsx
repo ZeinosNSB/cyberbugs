@@ -1,6 +1,6 @@
-import { Breadcrumb, Layout, Menu } from 'antd'
+import { Layout, Menu } from 'antd'
 import { useState } from 'react'
-import { Outlet } from 'react-router-dom'
+import { Link, Outlet, useLocation } from 'react-router-dom'
 
 import SideBar from '../components/SideBar'
 import { useTheme } from '../hooks/useTheme'
@@ -9,41 +9,41 @@ const { Sider, Content } = Layout
 
 const menuItems = [
   {
-    key: '1',
-    icon: <i className='fa fa-credit-card'></i>,
-    label: 'Cyber Board'
+    key: '/cyberbugs',
+    icon: <i className='fa fa-credit-card' />,
+    label: <Link to='/cyberbugs'>Cyber Boards</Link>
   },
   {
-    key: '2',
-    icon: <i className='fa fa-cog'></i>,
-    label: 'Project Settings'
+    key: '/create-project',
+    icon: <i className='fa fa-file-alt' />,
+    label: <Link to='/create-project'>Create Projects</Link>
   },
   {
     type: 'divider'
   },
   {
     key: '3',
-    icon: <i className='fa fa-truck'></i>,
+    icon: <i className='fa fa-truck' />,
     label: 'Releases'
   },
   {
     key: '4',
-    icon: <i className='fa fa-equals'></i>,
+    icon: <i className='fa fa-equals' />,
     label: 'Issues and filters'
   },
   {
     key: '5',
-    icon: <i className='fa fa-paste'></i>,
+    icon: <i className='fa fa-paste' />,
     label: 'Pages'
   },
   {
     key: '6',
-    icon: <i className='fa fa-location-arrow'></i>,
+    icon: <i className='fa fa-location-arrow' />,
     label: 'Reports'
   },
   {
     key: '7',
-    icon: <i className='fa fa-box'></i>,
+    icon: <i className='fa fa-box' />,
     label: 'Components'
   }
 ]
@@ -51,7 +51,9 @@ const menuItems = [
 function CyberBugsTemplate() {
   const [collapsed, setCollapsed] = useState(true)
   const { token } = useTheme()
+  const location = useLocation()
   const toggle = () => setCollapsed(!collapsed)
+  const defaultKey = location?.pathname
   return (
     <div className='h-screen font-normal flex'>
       <Layout>
@@ -75,7 +77,7 @@ function CyberBugsTemplate() {
           <Menu
             style={{ borderInlineEnd: 'none' }}
             mode='inline'
-            defaultSelectedKeys={['1']}
+            defaultSelectedKeys={[defaultKey]}
             items={menuItems}
           />
         </Sider>
@@ -89,13 +91,6 @@ function CyberBugsTemplate() {
               borderRadius: token.borderRadiusLG
             }}
           >
-            <Breadcrumb
-              items={[
-                { href: '', title: 'Project' },
-                { href: '', title: 'CyberLearn' },
-                { title: 'Cyber Board' }
-              ]}
-            />
             <Outlet />
           </Content>
         </Layout>
