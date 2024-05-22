@@ -3,12 +3,13 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import http from '../../utils/http'
 
 const initialState = {
-  userSignIn: {}
+  setUserSignIn: {},
+  SignIn: []
 }
 
-export const usersSignIn = createAsyncThunk('user/signIn', async (data, thunkAPI) => {
+export const usersSignIn = createAsyncThunk('users/signIn', async (data, thunkAPI) => {
   try {
-    const response = await http.post('signin', data, {
+    const response = await http.post('Users/signin', data, {
       signal: thunkAPI.signal
     })
     return response.data
@@ -25,7 +26,7 @@ const usersSlice = createSlice({
       state.userSignIn = action.payload
     }
   },
-  extraReducers(builder) {
+  extraReducers: builder => {
     builder.addCase(usersSignIn.fulfilled, (state, action) => {
       state.SignIn = action.payload
     })

@@ -14,7 +14,7 @@ import * as yup from 'yup'
 import { FormItem } from '../components/FormItem'
 import { setUserSignIn, usersSignIn } from '../store/reducer/usersSlice'
 import { UserSignInStyles } from '../styles/UserSignInStyles'
-import { TOKEN } from '../utils/settingSystems'
+import { TOKEN, USER_LOGIN } from '../utils/settingSystems'
 
 const { Text, Title, Link } = Typography
 
@@ -37,10 +37,9 @@ export default function UserSignIn() {
   const onSubmit = async values => {
     try {
       const result = await dispatch(usersSignIn(values)).unwrap()
-      console.log(result)
       if (result?.content?.accessToken) {
         localStorage.setItem(TOKEN, result?.content?.accessToken)
-        localStorage.setItem('user_login', JSON.stringify(result.content))
+        localStorage.setItem(USER_LOGIN, JSON.stringify(result?.content))
         dispatch(setUserSignIn(result.content))
         navigate('/')
       }

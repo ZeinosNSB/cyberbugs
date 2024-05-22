@@ -1,8 +1,8 @@
-import { Form as AntdForm } from 'antd'
+import { Form } from 'antd'
 import { Children, cloneElement, isValidElement, useEffect } from 'react'
 import { useController } from 'react-hook-form'
 
-export const FormItem = ({
+export function FormItem({
   children,
   control,
   name,
@@ -10,16 +10,16 @@ export const FormItem = ({
   help,
   valuePropName,
   ...props
-}) => {
+}) {
   const { field, fieldState } = useController({ name, control, disabled })
-  const form = AntdForm.useFormInstance()
+  const form = Form.useFormInstance()
 
   useEffect(() => {
     form.setFieldValue(name, field.value)
   }, [field.value, form, name])
 
   return (
-    <AntdForm.Item
+    <Form.Item
       {...props}
       name={name}
       initialValue={field.value}
@@ -45,6 +45,6 @@ export const FormItem = ({
             })
           })
       )}
-    </AntdForm.Item>
+    </Form.Item>
   )
 }

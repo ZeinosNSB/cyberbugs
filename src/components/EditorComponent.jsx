@@ -46,9 +46,52 @@ import 'tinymce/skins/content/default/content'
 import 'tinymce/skins/ui/oxide/content'
 
 import { Editor } from '@tinymce/tinymce-react'
+import { useController } from 'react-hook-form'
 
-function EditorComponent(props) {
-  return <Editor apiKey='xioemkmdlxsadn0uku2zmyb2vvcvprt4x37wotzhaf6purql' {...props} />
+function EditorComponent({ name, control, label }) {
+  const {
+    field: { onChange, value }
+  } = useController({
+    name,
+    control,
+    defaultValue: ''
+  })
+
+  return (
+    <>
+      <div className='mb-2'>{label}</div>
+      <Editor
+        apiKey='xioemkmdlxsadn0uku2zmyb2vvcvprt4x37wotzhaf6purql'
+        onEditorChange={value => onChange(value)}
+        value={value}
+        init={{
+          height: 500,
+          menubar: false,
+          initialValue: '',
+          plugins: [
+            'advlist',
+            'anchor',
+            'autolink',
+            'help',
+            'image',
+            'link',
+            'lists',
+            'searchreplace',
+            'table',
+            'wordcount'
+          ],
+          toolbar:
+            'undo redo | blocks | ' +
+            'bold italic forecolor | alignleft aligncenter ' +
+            'alignright alignjustify | bullist numlist outdent indent | ' +
+            'removeformat | help',
+          content_style:
+            'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+          license_key: 'gpl'
+        }}
+      />
+    </>
+  )
 }
 
 export default EditorComponent

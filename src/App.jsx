@@ -4,6 +4,7 @@ import CreateProject from './page/CreateProject'
 import CyberBoard from './page/CyberBoard'
 import Home from './page/Home'
 import PageNotFound from './page/PageNotFound'
+import ProjectManagement from './page/ProjectManagement'
 import UserSignIn from './page/UserSignIn'
 import CyberBugsTemplate from './template/CyberBugsTemplate'
 import UsersSignTemplate from './template/UsersSignTemplate'
@@ -20,6 +21,7 @@ function App() {
         <Route element={<CyberBugsTemplate />}>
           <Route path='cyberbugs' element={<CyberBoard />} />
           <Route path='create-project' element={<CreateProject />} />
+          <Route path='project-management' element={<ProjectManagement />} />
         </Route>
         <Route path='*' element={<PageNotFound />} />
       </Routes>

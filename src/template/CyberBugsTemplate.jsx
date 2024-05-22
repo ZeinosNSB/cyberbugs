@@ -19,6 +19,11 @@ const menuItems = [
     label: <Link to='/create-project'>Create Projects</Link>
   },
   {
+    key: '/project-management',
+    icon: <i className='fa fa-folder-open' />,
+    label: <Link to='/project-management'>Project Management</Link>
+  },
+  {
     type: 'divider'
   },
   {
@@ -53,7 +58,6 @@ function CyberBugsTemplate() {
   const { token } = useTheme()
   const location = useLocation()
   const toggle = () => setCollapsed(!collapsed)
-  const defaultKey = location?.pathname
   return (
     <div className='h-screen font-normal flex'>
       <Layout>
@@ -77,7 +81,7 @@ function CyberBugsTemplate() {
           <Menu
             style={{ borderInlineEnd: 'none' }}
             mode='inline'
-            defaultSelectedKeys={[defaultKey]}
+            defaultSelectedKeys={[location?.pathname]}
             items={menuItems}
           />
         </Sider>
