@@ -11,10 +11,11 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import * as yup from 'yup'
 
-import { FormItem } from '../components/FormItem'
-import { setUserSignIn, usersSignIn } from '../store/reducer/usersSlice'
-import { UserSignInStyles } from '../styles/UserSignInStyles'
-import { TOKEN, USER_LOGIN } from '../utils/settingSystems'
+import { FormItem } from '../../components/FormItem'
+import { useSignInMutation } from '../../store/api/users.service'
+import { setUserSignIn } from '../../store/reducer/users.slice'
+import { TOKEN, USER_LOGIN } from '../../utils/settingSystems'
+import { UserSignInStyles } from './UserSignInStyles'
 
 const { Text, Title, Link } = Typography
 
@@ -30,13 +31,16 @@ export default function UserSignIn() {
   const styles = UserSignInStyles()
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const [signIn] = useSignInMutation()
+
   const { control, handleSubmit } = useForm({
     defaultValues: { remember: true },
     resolver: yupResolver(schema)
   })
+
   const onSubmit = async values => {
     try {
-      const result = await dispatch(usersSignIn(values)).unwrap()
+      const result = await signIn(values).unwrap()
       if (result?.content?.accessToken) {
         localStorage.setItem(TOKEN, result?.content?.accessToken)
         localStorage.setItem(USER_LOGIN, JSON.stringify(result?.content))

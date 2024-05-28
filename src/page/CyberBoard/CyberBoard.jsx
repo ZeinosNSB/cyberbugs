@@ -1,6 +1,6 @@
 import { Breadcrumb, Input } from 'antd'
 
-import CardBoard from '../components/CardBoard'
+import CardBoard from '../../components/CardBoard'
 
 function CyberBoard() {
   return (
