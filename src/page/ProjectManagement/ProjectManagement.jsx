@@ -1,12 +1,12 @@
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
-import { Button, Space, Table, Tag } from 'antd'
+import { Button, Popconfirm, Space, Table, Tag } from 'antd'
 import { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 import EditDrawer from '../../components/EditDrawer'
 import {
-  useGetAllProjectsQuery,
-  useGetProjectDetailQuery
+  useDeleteProjectMutation,
+  useGetAllProjectsQuery
 } from '../../store/api/project.service'
 import { openDrawer } from '../../store/reducer/drawer.slice'
 import { setProjectID } from '../../store/reducer/project.slice'
@@ -14,12 +14,8 @@ import { setProjectID } from '../../store/reducer/project.slice'
 function ProjectManagement() {
   const [sortedInfo, setSortedInfo] = useState({})
   const { data, isFetching } = useGetAllProjectsQuery()
-  const { projectID } = useSelector(state => state.project)
-  const { data: projectDetail } = useGetProjectDetailQuery(projectID, {
-    skip: !projectID
-  })
+  const [deleteProject] = useDeleteProjectMutation()
   const dispatch = useDispatch()
-  console.log(projectDetail)
 
   const handleChange = sorter => {
     setSortedInfo(sorter)
@@ -40,6 +36,20 @@ function ProjectManagement() {
     dispatch(openDrawer())
     dispatch(setProjectID(id))
   }
+
+  const handleDeleteProject = id => {
+    deleteProject(id)
+  }
+  //
+  // useEffect(() => {
+  //   if (isSuccess) {
+  //     notificationFunc(
+  //       'Deletion successful!',
+  //       'Projects data has been completely deleted, bro',
+  //       'success'
+  //     )
+  //   }
+  // }, [isSuccess])
 
   const columns = [
     {
@@ -78,7 +88,18 @@ function ProjectManagement() {
             icon={<EditOutlined />}
             onClick={() => handleClick(record.id)}
           />
-          <Button danger icon={<DeleteOutlined />} />
+          <Popconfirm
+            title='Delete the task'
+            description='Are you sure to delete this project, bro?'
+            onConfirm={() => {
+              handleDeleteProject(record.id)
+            }}
+            okText='Yes'
+            okType='danger'
+            cancelText='No'
+          >
+            <Button danger icon={<DeleteOutlined />} />
+          </Popconfirm>
         </Space>
       )
     }
@@ -103,7 +124,7 @@ function ProjectManagement() {
         onChange={handleChange}
         loading={isFetching}
       />
-      <EditDrawer projectDetail={projectDetail} />
+      <EditDrawer />
     </>
   )
 }

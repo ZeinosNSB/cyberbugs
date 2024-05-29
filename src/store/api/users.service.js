@@ -11,7 +11,7 @@ export const usersApi = createApi({
       query: body => ({
         url: 'Users/signin',
         method: 'POST',
-        body
+        data: body
       })
     })
   })

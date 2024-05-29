@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { DOMAIN_API, TOKEN } from './settingSystems'
+import { DOMAIN_API, TOKEN } from '../utils/settingSystems'
 
 const axiosInstance = axios.create({
   baseURL: DOMAIN_API,

@@ -1,17 +1,20 @@
-import axiosInstance from '../utils/axiosInstance'
+import axiosInstance from './axiosInstance'
 
 const axiosBaseQuery =
   ({ baseUrl } = { baseUrl: '' }) =>
   async arg => {
     const isString = typeof arg === 'string'
-    const { url, method, params, body } = isString ? { url: arg, method: 'GET' } : arg
+    const { url, method, params, data, body } = isString
+      ? { url: arg, method: 'GET' }
+      : arg
 
     try {
       const result = await axiosInstance({
         url: baseUrl + url,
         method,
-        data: body,
-        params
+        data,
+        params,
+        body
       })
       return { data: result.data }
     } catch (axiosError) {

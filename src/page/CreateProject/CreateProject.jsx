@@ -24,7 +24,6 @@ function CreateProject() {
 
   const onSubmit = value => {
     createProject(value)
-    console.log(value)
     reset({
       projectName: '',
       description: '',
