@@ -20,17 +20,17 @@ function CyberBoard() {
         />
         <div className='flex -space-x-2 pl-8 pr-4'>
           <img
-            className='inline-block h-8 w-8 rounded-full ring-2 ring-white hover:-translate-y-1 border border-amber-500 transition-transform duration-200'
+            className='cursor-pointer inline-block h-8 w-8 rounded-full ring-2 ring-white hover:-translate-y-1 border border-amber-500 transition-transform duration-200'
             src='./img/download (1).jfif'
             alt='User1'
           />
           <img
-            className='inline-block h-8 w-8 rounded-full ring-2 ring-white hover:-translate-y-1 border border-amber-500 transition-transform duration-200'
+            className='cursor-pointer inline-block h-8 w-8 rounded-full ring-2 ring-white hover:-translate-y-1 border border-amber-500 transition-transform duration-200'
             src='./img/download (2).jfif'
             alt='User2'
           />
           <img
-            className='inline-block h-8 w-8 rounded-full ring-2 ring-white hover:-translate-y-1 border border-amber-500 transition-transform duration-200'
+            className='cursor-pointer inline-block h-8 w-8 rounded-full ring-2 ring-white hover:-translate-y-1 border border-amber-500 transition-transform duration-200'
             src='./img/download (3).jfif'
             alt='User3'
           />

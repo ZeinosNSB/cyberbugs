@@ -29,5 +29,4 @@ const notificationSlice = createSlice({
   }
 })
 
-const notificationReducer = notificationSlice.reducer
-export default notificationReducer
+export default notificationSlice.reducer
