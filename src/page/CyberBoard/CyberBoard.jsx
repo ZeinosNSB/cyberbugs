@@ -15,21 +15,24 @@ function CyberBoard() {
       <h1 className='text-2xl py-5'>Cyber Board</h1>
       <div className='flex items-center pb-14'>
         <Input
-          rootClassName='w-44 bg-slate-100'
+          rootClassName='w-56 bg-slate-100'
           prefix={<i className='fa fa-search'></i>}
         />
-        <Avatar.Group className='pl-8 pr-4'>
+        <Avatar.Group className='pl-12 pr-8'>
           <Avatar
-            className='cursor-pointer hover:-translate-y-1 transition-transform duration-200'
+            className='cursor-pointer hover:-translate-y-1.5 transition-transform duration-200'
             src='./img/download (1).jfif'
+            size={35}
           />
           <Avatar
-            className='cursor-pointer hover:-translate-y-1 transition-transform duration-200'
+            className='cursor-pointer hover:-translate-y-1.5 transition-transform duration-200'
             src='./img/download (2).jfif'
+            size={35}
           />
           <Avatar
-            className='cursor-pointer hover:-translate-y-1 transition-transform duration-200'
+            className='cursor-pointer hover:-translate-y-1.5 transition-transform duration-200'
             src='./img/download (3).jfif'
+            size={35}
           />
         </Avatar.Group>
         <div>

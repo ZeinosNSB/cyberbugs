@@ -15,6 +15,7 @@ import {
 } from 'antd'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { NavLink } from 'react-router-dom'
 
 import EditDrawer from '../../components/EditDrawer'
 import useDebounce from '../../hooks/useDebounce'
@@ -65,6 +66,7 @@ function ProjectManagement() {
 
   const columns = [
     {
+      width: '7%',
       title: 'ID',
       dataIndex: 'id',
       key: 'id',
@@ -75,14 +77,21 @@ function ProjectManagement() {
     {
       title: 'Project Name',
       dataIndex: 'projectName',
-      key: 'projectName'
+      key: 'projectName',
+      render: (text, record) => (
+        <NavLink to={`/project-detail/${record.id}`} className='text-blue-400'>
+          {text}
+        </NavLink>
+      )
     },
     {
+      width: '18%',
       title: 'Category',
       dataIndex: 'categoryName',
       key: 'categoryName'
     },
     {
+      width: '18%',
       title: 'Creator',
       key: 'creator',
       render: record => {
@@ -90,6 +99,7 @@ function ProjectManagement() {
       }
     },
     {
+      width: '18%',
       title: 'Members',
       key: 'members',
       render: record => {
@@ -179,6 +189,7 @@ function ProjectManagement() {
       }
     },
     {
+      width: '10%',
       title: 'Action',
       dataIndex: 'action',
       key: 'action',
