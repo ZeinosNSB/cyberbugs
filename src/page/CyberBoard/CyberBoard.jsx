@@ -1,4 +1,4 @@
-import { Breadcrumb, Input } from 'antd'
+import { Avatar, Breadcrumb, Input } from 'antd'
 
 import CardBoard from '../../components/CardBoard'
 
@@ -18,23 +18,20 @@ function CyberBoard() {
           rootClassName='w-44 bg-slate-100'
           prefix={<i className='fa fa-search'></i>}
         />
-        <div className='flex -space-x-2 pl-8 pr-4'>
-          <img
-            className='cursor-pointer inline-block h-8 w-8 rounded-full ring-2 ring-white hover:-translate-y-1 border border-amber-500 transition-transform duration-200'
+        <Avatar.Group className='pl-8 pr-4'>
+          <Avatar
+            className='cursor-pointer hover:-translate-y-1 transition-transform duration-200'
             src='./img/download (1).jfif'
-            alt='User1'
           />
-          <img
-            className='cursor-pointer inline-block h-8 w-8 rounded-full ring-2 ring-white hover:-translate-y-1 border border-amber-500 transition-transform duration-200'
+          <Avatar
+            className='cursor-pointer hover:-translate-y-1 transition-transform duration-200'
             src='./img/download (2).jfif'
-            alt='User2'
           />
-          <img
-            className='cursor-pointer inline-block h-8 w-8 rounded-full ring-2 ring-white hover:-translate-y-1 border border-amber-500 transition-transform duration-200'
+          <Avatar
+            className='cursor-pointer hover:-translate-y-1 transition-transform duration-200'
             src='./img/download (3).jfif'
-            alt='User3'
           />
-        </div>
+        </Avatar.Group>
         <div>
           <span className='mr-2 py-2 px-4 hover:bg-gray-100 hover:rounded-md cursor-pointer'>
             Only My Issues

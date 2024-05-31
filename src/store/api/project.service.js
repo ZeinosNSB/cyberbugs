@@ -47,6 +47,22 @@ export const projectApi = createApi({
         params: { projectID: id }
       }),
       invalidatesTags: (result, error, id) => [{ type: 'Project', id }]
+    }),
+    assignUserProject: build.mutation({
+      query: body => ({
+        url: 'Project/assignUserProject',
+        method: 'POST',
+        data: body
+      }),
+      invalidatesTags: (result, error, body) => [{ type: 'Project', id: body.projectID }]
+    }),
+    removeUserFromProject: build.mutation({
+      query: body => ({
+        url: 'Project/removeUserFromProject',
+        method: 'POST',
+        data: body
+      }),
+      invalidatesTags: (result, error, body) => [{ type: 'Project', id: body.projectID }]
     })
   })
 })
@@ -56,5 +72,7 @@ export const {
   useCreateProjectMutation,
   useGetProjectDetailQuery,
   useUpdateProjectMutation,
-  useDeleteProjectMutation
+  useDeleteProjectMutation,
+  useAssignUserProjectMutation,
+  useRemoveUserFromProjectMutation
 } = projectApi

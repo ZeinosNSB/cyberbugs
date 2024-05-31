@@ -22,6 +22,7 @@ function App() {
           <Route path='cyberbugs' element={<CyberBoard />} />
           <Route path='create-project' element={<CreateProject />} />
           <Route path='project-management' element={<ProjectManagement />} />
+          <Route path='project-detail/:projectId' element={<h1>Project Detail</h1>} />
         </Route>
         <Route path='*' element={<PageNotFound />} />
       </Routes>

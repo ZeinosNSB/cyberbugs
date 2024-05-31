@@ -13,8 +13,21 @@ export const usersApi = createApi({
         method: 'POST',
         data: body
       })
+    }),
+    getUser: build.query({
+      query: keyword => ({
+        url: 'Users/getUser',
+        params: { keyword }
+      }),
+      providesTags: result =>
+        result
+          ? [
+              ...result.content.map(({ id }) => ({ type: 'Users', id })),
+              { type: 'Users', id: 'LIST' }
+            ]
+          : [{ type: 'Users', id: 'LIST' }]
     })
   })
 })
 
-export const { useSignInMutation } = usersApi
+export const { useSignInMutation, useGetUserQuery } = usersApi

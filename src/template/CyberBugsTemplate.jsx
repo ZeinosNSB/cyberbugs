@@ -2,6 +2,7 @@ import { Layout, Menu } from 'antd'
 import { useState } from 'react'
 import { Link, Outlet, useLocation } from 'react-router-dom'
 
+import logo from '../assets/img/download.jfif'
 import SideBar from '../components/SideBar'
 import { useTheme } from '../hooks/useTheme'
 
@@ -68,7 +69,7 @@ function CyberBugsTemplate() {
           <div className='py-5 flex justify-evenly'>
             <img
               className='w-14 h-auto rounded-full cursor-pointer'
-              src='./img/download.jfif'
+              src={logo}
               alt='Logo'
             />
             {!collapsed && (
