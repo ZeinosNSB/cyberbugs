@@ -6,7 +6,6 @@ import { useLocation } from 'react-router-dom'
 
 import { useGetPrioritiesQuery } from '../store/api/priority.service'
 import { useGetAllProjectsQuery } from '../store/api/project.service'
-import { useGetStatusQuery } from '../store/api/status.service'
 import { useGetTaskTypesQuery } from '../store/api/tasktype.service'
 import DrawerTemplate from '../template/DrawerTemplate'
 import EditorComponent from './EditorComponent'
@@ -22,7 +21,7 @@ function CreateTaskDrawer() {
   const location = useLocation()
   const { data: projects } = useGetAllProjectsQuery()
   const { data: priority } = useGetPrioritiesQuery()
-  const { data: status } = useGetStatusQuery()
+  // const { data: status } = useGetStatusQuery()
   const { data: taskType } = useGetTaskTypesQuery()
   const { control, handleSubmit, setValue } = useForm({
     defaultValues: {
