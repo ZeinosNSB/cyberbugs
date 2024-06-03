@@ -14,7 +14,7 @@ import {
   Tag
 } from 'antd'
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { NavLink } from 'react-router-dom'
 
 import EditDrawer from '../../components/EditDrawer'
@@ -27,12 +27,13 @@ import {
 } from '../../store/api/project.service'
 import { useGetUserQuery } from '../../store/api/users.service'
 import { openDrawer } from '../../store/reducer/drawer.slice'
-import { setProjectID } from '../../store/reducer/project.slice'
+import { setProjectDetail } from '../../store/reducer/project.slice'
 
 function ProjectManagement() {
-  const dispatch = useDispatch()
   const [sortedInfo, setSortedInfo] = useState({})
   const [userKeyword, setUserKeyword] = useState('')
+  const { projectDetail } = useSelector(state => state.project)
+  const dispatch = useDispatch()
   const debouncedSearchTerm = useDebounce(userKeyword, 1000)
   const { data: projectList, isFetching } = useGetAllProjectsQuery()
   const { data: user } = useGetUserQuery(debouncedSearchTerm)
@@ -55,9 +56,9 @@ function ProjectManagement() {
     })
   }
 
-  const handleClick = id => {
-    dispatch(openDrawer())
-    dispatch(setProjectID(id))
+  const handleClick = projectDetail => {
+    dispatch(openDrawer('editProject'))
+    dispatch(setProjectDetail(projectDetail))
   }
 
   const handleDeleteProject = id => {
@@ -79,7 +80,7 @@ function ProjectManagement() {
       dataIndex: 'projectName',
       key: 'projectName',
       render: (text, record) => (
-        <NavLink to={`/project-detail/${record.id}`} className='text-blue-400'>
+        <NavLink to={`/cyberbugs/${record.id}`} className='text-blue-400'>
           {text}
         </NavLink>
       )
@@ -198,7 +199,7 @@ function ProjectManagement() {
           <Button
             type='text'
             icon={<EditOutlined />}
-            onClick={() => handleClick(record.id)}
+            onClick={() => handleClick(record)}
           />
           <Popconfirm
             title='Delete the task'
@@ -237,7 +238,7 @@ function ProjectManagement() {
         onChange={handleChange}
         loading={isFetching}
       />
-      <EditDrawer />
+      <EditDrawer projectDetail={projectDetail} />
     </>
   )
 }

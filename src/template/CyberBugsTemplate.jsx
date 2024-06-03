@@ -1,10 +1,14 @@
 import { Layout, Menu } from 'antd'
-import { useState } from 'react'
-import { Link, Outlet, useLocation } from 'react-router-dom'
+import { useMemo, useState } from 'react'
+import { Link, Route, Routes, useLocation } from 'react-router-dom'
 
 import logo from '../assets/img/download.jfif'
 import SideBar from '../components/SideBar'
 import { useTheme } from '../hooks/useTheme'
+import CreateProject from '../page/CreateProject'
+import CyberBoard from '../page/CyberBoard'
+import ProjectDetailBoard from '../page/ProjectDetailBoard'
+import ProjectManagement from '../page/ProjectManagement'
 
 const { Sider, Content } = Layout
 
@@ -59,6 +63,12 @@ function CyberBugsTemplate() {
   const { token } = useTheme()
   const location = useLocation()
   const toggle = () => setCollapsed(!collapsed)
+
+  const activeKey = useMemo(() => {
+    const keys = menuItems.map(item => item.key)
+    return keys.find(key => location.pathname.startsWith(key))
+  }, [location])
+
   return (
     <div className='h-screen font-normal flex'>
       <Layout>
@@ -82,7 +92,7 @@ function CyberBugsTemplate() {
           <Menu
             style={{ borderInlineEnd: 'none' }}
             mode='inline'
-            defaultSelectedKeys={[location?.pathname]}
+            selectedKeys={[activeKey]}
             items={menuItems}
           />
         </Sider>
@@ -96,7 +106,12 @@ function CyberBugsTemplate() {
               borderRadius: token.borderRadiusLG
             }}
           >
-            <Outlet />
+            <Routes>
+              <Route path='cyberbugs' element={<CyberBoard />} />
+              <Route path='cyberbugs/:projectID' element={<ProjectDetailBoard />} />
+              <Route path='create-project' element={<CreateProject />} />
+              <Route path='project-management' element={<ProjectManagement />} />
+            </Routes>
           </Content>
         </Layout>
       </Layout>

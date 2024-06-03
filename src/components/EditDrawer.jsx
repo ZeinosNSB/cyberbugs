@@ -3,43 +3,43 @@ import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 
-import {
-  useGetProjectDetailQuery,
-  useUpdateProjectMutation
-} from '../store/api/project.service'
+import { useUpdateProjectMutation } from '../store/api/project.service'
 import { useGetProjectsCategoryQuery } from '../store/api/projectCategory.service'
 import { closeDrawer } from '../store/reducer/drawer.slice'
 import DrawerTemplate from '../template/DrawerTemplate'
 import EditorComponent from './EditorComponent'
 import { FormItem } from './FormItem'
 
-function EditDrawer() {
+function EditDrawer({ projectDetail }) {
+  const { currentDrawer } = useSelector(state => state.drawer)
+  const dispatch = useDispatch()
   const { control, handleSubmit, setValue } = useForm()
   const { data: projectCategory } = useGetProjectsCategoryQuery()
   const [updateProject] = useUpdateProjectMutation()
-  const { projectID } = useSelector(state => state.project)
-  const { data: projectDetail } = useGetProjectDetailQuery(projectID, {
-    skip: !projectID
-  })
-  const dispatch = useDispatch()
+
+  const isOpen = currentDrawer === 'editProject'
 
   const onSubmit = data => {
-    updateProject({ id: projectID, data: data })
+    updateProject({ id: projectDetail?.id, data: data })
     dispatch(closeDrawer())
   }
 
   useEffect(() => {
     if (projectDetail) {
-      setValue('projectID', projectDetail?.content?.id)
-      setValue('projectName', projectDetail?.content?.projectName)
-      setValue('categoryId', projectDetail?.content?.projectCategory?.id)
-      setValue('description', projectDetail?.content?.description)
+      setValue('projectID', projectDetail?.id)
+      setValue('projectName', projectDetail?.projectName)
+      setValue('categoryId', projectDetail?.categoryId)
+      setValue('description', projectDetail?.description)
     }
   }, [projectDetail, setValue])
 
   return (
-    <DrawerTemplate onSubmitCallback={handleSubmit(onSubmit)}>
-      <Form name='create-pj-form' layout='vertical' onFinish={handleSubmit(onSubmit)}>
+    <DrawerTemplate
+      open={isOpen}
+      title='Edit Project'
+      onSubmitCallback={handleSubmit(onSubmit)}
+    >
+      <Form name='edit-form' layout='vertical' onFinish={handleSubmit(onSubmit)}>
         <FormItem control={control} name='projectID' label='Project ID' disabled>
           <Input />
         </FormItem>

@@ -1,6 +1,6 @@
-import { Avatar, Breadcrumb, Input } from 'antd'
+import { Avatar, Badge, Breadcrumb, Card, Col, Input, Row } from 'antd'
 
-import CardBoard from '../../components/CardBoard'
+const { Ribbon } = Badge
 
 function CyberBoard() {
   return (
@@ -44,7 +44,48 @@ function CyberBoard() {
           </span>
         </div>
       </div>
-      <CardBoard />
+      <Row gutter={16}>
+        <Col span={6}>
+          <Ribbon text='0' color='#ccd5eb'>
+            <Card
+              title={<span className='text-xs'>BACKLOG</span>}
+              bordered={false}
+              className='bg-gray-100'
+              size='small'
+            ></Card>
+          </Ribbon>
+        </Col>
+        <Col span={6}>
+          <Ribbon text='0' color='#fb923c'>
+            <Card
+              title={<span className='text-xs'>SELECTED FOR DEVELOPMENT</span>}
+              bordered={false}
+              className='bg-gray-100'
+              size='small'
+            ></Card>
+          </Ribbon>
+        </Col>
+        <Col span={6}>
+          <Ribbon text='0' color='#3399ff'>
+            <Card
+              title={<span className='text-xs'>IN PROGRESS</span>}
+              bordered={false}
+              className='bg-gray-100'
+              size='small'
+            ></Card>
+          </Ribbon>
+        </Col>
+        <Col span={6}>
+          <Ribbon text='0' color='#90ee90'>
+            <Card
+              title={<span className='text-xs'>DONE</span>}
+              bordered={false}
+              className='bg-gray-100'
+              size='small'
+            ></Card>
+          </Ribbon>
+        </Col>
+      </Row>
     </>
   )
 }

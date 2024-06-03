@@ -25,12 +25,6 @@ export const projectApi = createApi({
       }),
       invalidatesTags: [{ type: 'Project', id: 'LIST' }]
     }),
-    getProjectDetail: build.query({
-      query: id => ({
-        url: 'Project/getProjectDetail',
-        params: { id }
-      })
-    }),
     updateProject: build.mutation({
       query: body => ({
         url: 'Project/updateProject',
@@ -63,6 +57,19 @@ export const projectApi = createApi({
         data: body
       }),
       invalidatesTags: (result, error, body) => [{ type: 'Project', id: body.projectID }]
+    }),
+    getProjectDetail: build.query({
+      query: id => ({
+        url: 'Project/getProjectDetail',
+        params: { id }
+      })
+    }),
+    createTask: build.mutation({
+      query: body => ({
+        url: 'Project/createTask',
+        method: 'POST',
+        data: body
+      })
     })
   })
 })
@@ -70,9 +77,9 @@ export const projectApi = createApi({
 export const {
   useGetAllProjectsQuery,
   useCreateProjectMutation,
-  useGetProjectDetailQuery,
   useUpdateProjectMutation,
   useDeleteProjectMutation,
   useAssignUserProjectMutation,
-  useRemoveUserFromProjectMutation
+  useRemoveUserFromProjectMutation,
+  useGetProjectDetailQuery
 } = projectApi

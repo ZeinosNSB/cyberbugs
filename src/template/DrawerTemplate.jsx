@@ -1,10 +1,9 @@
 import { Button, Drawer, Space } from 'antd'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 import { closeDrawer } from '../store/reducer/drawer.slice'
 
-function DrawerTemplate({ children, onSubmitCallback, placement }) {
-  const { open } = useSelector(state => state.drawer)
+function DrawerTemplate({ children, onSubmitCallback, placement, title, open }) {
   const dispatch = useDispatch()
 
   const onClose = () => {
@@ -14,13 +13,14 @@ function DrawerTemplate({ children, onSubmitCallback, placement }) {
   return (
     <div>
       <Drawer
-        title='Basic Drawer'
+        title={title}
         placement={placement || 'right'}
         closable={false}
         onClose={onClose}
         open={open}
         key='left'
         width={720}
+        destroyOnClose={true}
         extra={
           <Space>
             <Button onClick={onClose}>Cancel</Button>
