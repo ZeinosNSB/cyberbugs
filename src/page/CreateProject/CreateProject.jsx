@@ -2,8 +2,8 @@ import { Button, Form, Input, Select } from 'antd'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 
-import EditorComponent from '../../components/EditorComponent'
-import { FormItem } from '../../components/FormItem'
+import EditorComponent from '../../components/editor/EditorComponent'
+import { FormItem } from '../../components/form/FormItem'
 import { useCreateProjectMutation } from '../../store/api/project.service'
 import { useGetProjectsCategoryQuery } from '../../store/api/projectCategory.service'
 

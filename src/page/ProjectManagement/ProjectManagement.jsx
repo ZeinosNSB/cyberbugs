@@ -17,7 +17,7 @@ import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { NavLink } from 'react-router-dom'
 
-import EditDrawer from '../../components/EditDrawer'
+import EditDrawer from '../../components/drawer/EditDrawer'
 import useDebounce from '../../hooks/useDebounce'
 import {
   useAssignUserProjectMutation,

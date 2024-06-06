@@ -1,7 +1,12 @@
-import { Avatar, Badge, Breadcrumb, Card, Col, Input, Row } from 'antd'
+import { Avatar, Badge, Breadcrumb, Card, Col, Flex, Input, Row } from 'antd'
+import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 
-import { useGetProjectDetailQuery } from '../../store/api/project.service'
+import TaskDetailModal from '../../components/modal/TaskDetailModal'
+import {
+  useGetProjectDetailQuery,
+  useGetTaskDetailQuery
+} from '../../store/api/project.service'
 
 const { Ribbon } = Badge
 
@@ -13,8 +18,11 @@ const taskColorMap = {
 }
 
 function ProjectDetailBoard() {
+  const [open, setOpen] = useState(false)
+  const [taskID, setTaskID] = useState(null)
   const { projectID } = useParams()
   const { data: projectDetail } = useGetProjectDetailQuery(projectID)
+  const { data: taskDetail } = useGetTaskDetailQuery(taskID, { skip: !open })
 
   return (
     <div>
@@ -39,6 +47,7 @@ function ProjectDetailBoard() {
             color: '#f56a00',
             backgroundColor: '#fde3cf'
           }}
+          size={35}
         >
           {projectDetail?.content.members.map(member => (
             <Avatar
@@ -60,20 +69,85 @@ function ProjectDetailBoard() {
       </div>
       <Row gutter={16}>
         {projectDetail?.content?.lstTask.map(task => (
-          <Col span={6} key={task.statusId}>
-            <Ribbon text={task.lstTaskDeTail.length} color={taskColorMap[task.statusId]}>
-              <Card
-                title={<span className='text-xs'>{task.statusName}</span>}
-                bordered={false}
-                className='bg-gray-100'
-                size='small'
+          <>
+            <Col span={6} key={task.statusId}>
+              <Ribbon
+                text={task.lstTaskDeTail.length}
+                color={taskColorMap[task.statusId]}
               >
-                <Card hoverable size='small' className='mb-3'>
-                  Content
+                <Card
+                  title={<span className='text-xs'>{task.statusName}</span>}
+                  bordered={false}
+                  className='bg-gray-100'
+                  size='small'
+                >
+                  {task.lstTaskDeTail.map(taskDetail => (
+                    <Card
+                      key={taskDetail.taskId}
+                      className='my-3.5'
+                      hoverable
+                      size='small'
+                      onClick={() => {
+                        setOpen(true)
+                        setTaskID(taskDetail.taskId)
+                      }}
+                    >
+                      <p className='py-2 font-bold'>{taskDetail.taskName}</p>
+                      <Flex justify='space-between'>
+                        <div>
+                          {taskDetail.taskTypeDetail.id === 1 ? (
+                            <i className='fa fa-bookmark mr-2 text-green-500' />
+                          ) : (
+                            <i className='fa fa-bug mr-2 text-red-400' />
+                          )}
+                          {taskDetail.priorityTask.priorityId === 1 ? (
+                            <i className='fa fa-arrow-up text-red-500' />
+                          ) : taskDetail.priorityTask.priorityId === 2 ? (
+                            <i className='fa fa-arrow-up text-orange-400' />
+                          ) : taskDetail.priorityTask.priorityId === 3 ? (
+                            <i className='fa fa-arrow-down text-green-500' />
+                          ) : taskDetail.priorityTask.priorityId === 4 ? (
+                            <i className='fa fa-arrow-down text-green-300' />
+                          ) : null}
+                        </div>
+                        <Avatar.Group
+                          maxCount={2}
+                          maxStyle={{
+                            color: '#f56a00',
+                            backgroundColor: '#fde3cf',
+                            fontSize: '13px'
+                          }}
+                          max={{
+                            style: {
+                              color: '#f56a00',
+                              backgroundColor: '#fde3cf',
+                              fontSize: '13px'
+                            },
+                            count: '2'
+                          }}
+                          size={25}
+                        >
+                          {taskDetail.assigness.map(member => (
+                            <Avatar
+                              className='cursor-pointer hover:-translate-y-1 transition-transform duration-200'
+                              key={member.userId}
+                              src={member.avatar}
+                              size={25}
+                            />
+                          ))}
+                        </Avatar.Group>
+                      </Flex>
+                    </Card>
+                  ))}
                 </Card>
-              </Card>
-            </Ribbon>
-          </Col>
+              </Ribbon>
+            </Col>
+            <TaskDetailModal
+              open={open}
+              setOpen={setOpen}
+              taskDetail={taskDetail?.content}
+            />
+          </>
         ))}
       </Row>
     </div>

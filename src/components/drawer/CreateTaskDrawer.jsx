@@ -2,14 +2,17 @@ import { Col, Flex, Form, Input, InputNumber, Row, Select, Slider } from 'antd'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
-import { useLocation } from 'react-router-dom'
 
-import { useGetPrioritiesQuery } from '../store/api/priority.service'
-import { useGetAllProjectsQuery } from '../store/api/project.service'
-import { useGetTaskTypesQuery } from '../store/api/tasktype.service'
-import DrawerTemplate from '../template/DrawerTemplate'
-import EditorComponent from './EditorComponent'
-import { FormItem } from './FormItem'
+import { useGetPrioritiesQuery } from '../../store/api/priority.service'
+import {
+  useCreateTaskMutation,
+  useGetAllProjectsQuery
+} from '../../store/api/project.service'
+import { useGetStatusQuery } from '../../store/api/status.service'
+import { useGetTaskTypesQuery } from '../../store/api/tasktype.service'
+import DrawerTemplate from '../../template/DrawerTemplate'
+import EditorComponent from '../editor/EditorComponent'
+import { FormItem } from '../form/FormItem'
 
 function CreateTaskDrawer() {
   const [selectedItems, setSelectedItems] = useState([])
@@ -18,33 +21,26 @@ function CreateTaskDrawer() {
   const [timeSpent, setTimeSpent] = useState(0)
   const [timeRemaining, setTimeRemaining] = useState(0)
   const { currentDrawer } = useSelector(state => state.drawer)
-  const location = useLocation()
   const { data: projects } = useGetAllProjectsQuery()
   const { data: priority } = useGetPrioritiesQuery()
-  // const { data: status } = useGetStatusQuery()
+  const { data: status } = useGetStatusQuery()
   const { data: taskType } = useGetTaskTypesQuery()
+  const [createTask] = useCreateTaskMutation()
   const { control, handleSubmit, setValue } = useForm({
     defaultValues: {
-      projectId: '',
-      priorityId: '',
-      taskId: '',
-      originalEstimate: '',
+      originalEstimate: 0,
       timeTrackingSpent: 0,
-      timeTrackingRemaining: 0,
-      listUserAsign: [],
-      description: ''
+      timeTrackingRemaining: 0
     }
   })
-  console.log(projectMembers)
 
-  const isOpen = location.pathname.startsWith('/cyberbugs')
-    ? currentDrawer === 'createTask'
-    : false
+  const isOpen = currentDrawer === 'createTask'
 
   useEffect(() => {
-    setValue('taskId', taskType?.content[0]?.id)
+    setValue('typeId', taskType?.content[0]?.id)
     setValue('priorityId', priority?.content[0]?.priorityId)
-  }, [taskType, priority, setValue])
+    setValue('statusId', status?.content[0]?.statusId)
+  }, [taskType, priority, status, setValue])
 
   useEffect(() => {
     const selectedProject = projects?.content.find(project => project.id === projectID)
@@ -52,7 +48,7 @@ function CreateTaskDrawer() {
   }, [projectID, projects])
 
   const onSubmit = data => {
-    console.log(data)
+    createTask(data)
   }
 
   return (
@@ -72,6 +68,17 @@ function CreateTaskDrawer() {
             onSelect={value => setProjectID(value)}
           />
         </FormItem>
+        <FormItem control={control} name='taskName' label='Task Name'>
+          <Input />
+        </FormItem>
+        <FormItem control={control} name='statusId' label='Status'>
+          <Select
+            options={status?.content.map(item => ({
+              label: item.statusName,
+              value: item.statusId
+            }))}
+          />
+        </FormItem>
         <FormItem control={control} name='priorityId' label='Priority'>
           <Select
             options={priority?.content.map(item => ({
@@ -80,7 +87,7 @@ function CreateTaskDrawer() {
             }))}
           />
         </FormItem>
-        <FormItem control={control} name='taskId' label='Task type'>
+        <FormItem control={control} name='typeId' label='Task type'>
           <Select
             options={taskType?.content.map(item => ({
               label: item.taskType,
@@ -123,7 +130,7 @@ function CreateTaskDrawer() {
           </Col>
           <Col span={12}>
             <FormItem control={control} name='originalEstimate' label='Original Estimate'>
-              <Input />
+              <InputNumber min={0} className='w-full' />
             </FormItem>
           </Col>
         </Row>

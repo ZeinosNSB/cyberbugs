@@ -3,7 +3,7 @@ import { useMemo, useState } from 'react'
 import { Link, Route, Routes, useLocation } from 'react-router-dom'
 
 import logo from '../assets/img/download.jfif'
-import SideBar from '../components/SideBar'
+import SideBar from '../components/sidebar/SideBar'
 import { useTheme } from '../hooks/useTheme'
 import CreateProject from '../page/CreateProject'
 import CyberBoard from '../page/CyberBoard'

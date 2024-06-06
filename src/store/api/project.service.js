@@ -5,7 +5,18 @@ import axiosBaseQuery from '../../services/axiosBaseQuery'
 export const projectApi = createApi({
   reducerPath: 'projectApi',
   baseQuery: axiosBaseQuery(),
-  tagTypes: ['Project'],
+
+  // baseQuery: fetchBaseQuery({
+  //   baseUrl: DOMAIN_API,
+  //   prepareHeaders: headers => {
+  //     const token = localStorage.getItem(TOKEN)
+  //     if (token) {
+  //       headers.set('Authorization', `Bearer ${token}`)
+  //     }
+  //     return headers
+  //   }
+  // }),
+  tagTypes: ['Project', 'Project Detail', 'Task Detail'],
   endpoints: build => ({
     getAllProjects: build.query({
       query: () => 'Project/getAllProject',
@@ -62,14 +73,27 @@ export const projectApi = createApi({
       query: id => ({
         url: 'Project/getProjectDetail',
         params: { id }
-      })
+      }),
+      providesTags: result =>
+        result ? [{ type: 'Project Detail', id: result.content.id }] : []
     }),
     createTask: build.mutation({
       query: body => ({
         url: 'Project/createTask',
         method: 'POST',
         data: body
-      })
+      }),
+      invalidatesTags: (result, error, body) => [
+        { type: 'Project Detail', id: body.projectId }
+      ]
+    }),
+    getTaskDetail: build.query({
+      query: id => ({
+        url: 'Project/getTaskDetail',
+        params: { taskId: id }
+      }),
+      providesTags: result =>
+        result ? [{ type: 'Task Detail', id: result.content.id }] : []
     })
   })
 })
@@ -81,5 +105,7 @@ export const {
   useDeleteProjectMutation,
   useAssignUserProjectMutation,
   useRemoveUserFromProjectMutation,
-  useGetProjectDetailQuery
+  useGetProjectDetailQuery,
+  useCreateTaskMutation,
+  useGetTaskDetailQuery
 } = projectApi

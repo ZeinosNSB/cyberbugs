@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux'
 
-import { openDrawer } from '../store/reducer/drawer.slice'
-import CreateTaskDrawer from './CreateTaskDrawer'
+import { openDrawer } from '../../store/reducer/drawer.slice'
+import CreateTaskDrawer from '../drawer/CreateTaskDrawer'
 
 function SideBar() {
   const dispatch = useDispatch()

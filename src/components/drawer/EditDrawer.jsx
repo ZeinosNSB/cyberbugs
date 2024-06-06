@@ -3,12 +3,12 @@ import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { useUpdateProjectMutation } from '../store/api/project.service'
-import { useGetProjectsCategoryQuery } from '../store/api/projectCategory.service'
-import { closeDrawer } from '../store/reducer/drawer.slice'
-import DrawerTemplate from '../template/DrawerTemplate'
-import EditorComponent from './EditorComponent'
-import { FormItem } from './FormItem'
+import { useUpdateProjectMutation } from '../../store/api/project.service'
+import { useGetProjectsCategoryQuery } from '../../store/api/projectCategory.service'
+import { closeDrawer } from '../../store/reducer/drawer.slice'
+import DrawerTemplate from '../../template/DrawerTemplate'
+import EditorComponent from '../editor/EditorComponent'
+import { FormItem } from '../form/FormItem'
 
 function EditDrawer({ projectDetail }) {
   const { currentDrawer } = useSelector(state => state.drawer)

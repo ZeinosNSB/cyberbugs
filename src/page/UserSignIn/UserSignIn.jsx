@@ -11,7 +11,7 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import * as yup from 'yup'
 
-import { FormItem } from '../../components/FormItem'
+import { FormItem } from '../../components/form/FormItem'
 import { useSignInMutation } from '../../store/api/users.service'
 import { setUserSignIn } from '../../store/reducer/users.slice'
 import { TOKEN, USER_LOGIN } from '../../utils/settingSystems'
