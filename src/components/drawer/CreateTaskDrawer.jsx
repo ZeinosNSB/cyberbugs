@@ -1,7 +1,7 @@
 import { Col, Flex, Form, Input, InputNumber, Row, Select, Slider } from 'antd'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { useGetPrioritiesQuery } from '../../store/api/priority.service'
 import {
@@ -10,6 +10,10 @@ import {
 } from '../../store/api/project.service'
 import { useGetStatusQuery } from '../../store/api/status.service'
 import { useGetTaskTypesQuery } from '../../store/api/tasktype.service'
+import { closeDrawer } from '../../store/reducer/drawer.slice'
+import { setPriorityArr } from '../../store/reducer/priority.slice'
+import { setStatusArr } from '../../store/reducer/status.slice'
+import { setTaskTypeArr } from '../../store/reducer/task.slice'
 import DrawerTemplate from '../../template/DrawerTemplate'
 import EditorComponent from '../editor/EditorComponent'
 import { FormItem } from '../form/FormItem'
@@ -21,6 +25,7 @@ function CreateTaskDrawer() {
   const [timeSpent, setTimeSpent] = useState(0)
   const [timeRemaining, setTimeRemaining] = useState(0)
   const { currentDrawer } = useSelector(state => state.drawer)
+  const dispatch = useDispatch()
   const { data: projects } = useGetAllProjectsQuery()
   const { data: priority } = useGetPrioritiesQuery()
   const { data: status } = useGetStatusQuery()
@@ -36,19 +41,29 @@ function CreateTaskDrawer() {
 
   const isOpen = currentDrawer === 'createTask'
 
+  // set default value for select
   useEffect(() => {
     setValue('typeId', taskType?.content[0]?.id)
     setValue('priorityId', priority?.content[0]?.priorityId)
     setValue('statusId', status?.content[0]?.statusId)
   }, [taskType, priority, status, setValue])
 
+  // set project members
   useEffect(() => {
     const selectedProject = projects?.content.find(project => project.id === projectID)
     selectedProject && setProjectMembers(selectedProject.members)
   }, [projectID, projects])
 
+  //dispatch status and priority id to store
+  useEffect(() => {
+    status && dispatch(setStatusArr(status?.content))
+    priority && dispatch(setPriorityArr(priority?.content))
+    taskType && dispatch(setTaskTypeArr(taskType?.content))
+  }, [dispatch, status, priority, taskType])
+
   const onSubmit = data => {
     createTask(data)
+    dispatch(closeDrawer())
   }
 
   return (

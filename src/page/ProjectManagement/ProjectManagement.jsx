@@ -202,7 +202,7 @@ function ProjectManagement() {
             onClick={() => handleClick(record)}
           />
           <Popconfirm
-            title='Delete the task'
+            title='Delete the project'
             description='Are you sure to delete this project, bro?'
             onConfirm={() => {
               handleDeleteProject(record.id)

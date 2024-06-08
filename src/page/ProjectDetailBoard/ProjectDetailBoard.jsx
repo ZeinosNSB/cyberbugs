@@ -96,9 +96,9 @@ function ProjectDetailBoard() {
                       <Flex justify='space-between'>
                         <div>
                           {taskDetail.taskTypeDetail.id === 1 ? (
-                            <i className='fa fa-bookmark mr-2 text-green-500' />
-                          ) : (
                             <i className='fa fa-bug mr-2 text-red-400' />
+                          ) : (
+                            <i className='fa fa-bookmark mr-2 text-green-500' />
                           )}
                           {taskDetail.priorityTask.priorityId === 1 ? (
                             <i className='fa fa-arrow-up text-red-500' />
@@ -146,6 +146,8 @@ function ProjectDetailBoard() {
               open={open}
               setOpen={setOpen}
               taskDetail={taskDetail?.content}
+              members={projectDetail?.content?.members}
+              projectId={projectID}
             />
           </>
         ))}
