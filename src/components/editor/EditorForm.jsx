@@ -48,7 +48,7 @@ import 'tinymce/skins/ui/oxide/content'
 import { Editor } from '@tinymce/tinymce-react'
 import { useController } from 'react-hook-form'
 
-function EditorComponent({ name, control, label }) {
+function EditorForm({ name, control, label }) {
   const {
     field: { onChange, value }
   } = useController({
@@ -94,4 +94,4 @@ function EditorComponent({ name, control, label }) {
   )
 }
 
-export default EditorComponent
+export default EditorForm

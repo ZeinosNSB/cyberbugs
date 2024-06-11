@@ -2,7 +2,7 @@ import { Col, Row } from 'antd'
 import { useEffect, useState } from 'react'
 import { Outlet } from 'react-router-dom'
 
-const UsersSignTemplate = () => {
+const AccountTemplate = () => {
   const [size, setSize] = useState({
     width: Math.round(window.innerWidth),
     height: Math.round(window.innerHeight)
@@ -34,4 +34,4 @@ const UsersSignTemplate = () => {
   )
 }
 
-export default UsersSignTemplate
+export default AccountTemplate

@@ -2,10 +2,10 @@ import { Button, Form, Input, Select } from 'antd'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 
-import EditorComponent from '../../components/editor/EditorComponent'
+import EditorForm from '../../components/editor/EditorForm'
 import { FormItem } from '../../components/form/FormItem'
-import { useCreateProjectMutation } from '../../store/api/project.service'
-import { useGetProjectsCategoryQuery } from '../../store/api/projectCategory.service'
+import { useCreateProjectMutation } from '../../redux/api/project.service'
+import { useGetProjectsCategoryQuery } from '../../redux/api/projectCategory.service'
 
 function CreateProject() {
   const { data: projectCategory } = useGetProjectsCategoryQuery()
@@ -38,7 +38,7 @@ function CreateProject() {
         <FormItem control={control} name='projectName' label='Name'>
           <Input />
         </FormItem>
-        <EditorComponent control={control} name='description' label='Description' />
+        <EditorForm control={control} name='description' label='Description' />
         <FormItem
           control={control}
           name='categoryId'

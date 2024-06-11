@@ -5,17 +5,6 @@ import axiosBaseQuery from '../../services/axiosBaseQuery'
 export const projectApi = createApi({
   reducerPath: 'projectApi',
   baseQuery: axiosBaseQuery(),
-
-  // baseQuery: fetchBaseQuery({
-  //   baseUrl: DOMAIN_API,
-  //   prepareHeaders: headers => {
-  //     const token = localStorage.getItem(TOKEN)
-  //     if (token) {
-  //       headers.set('Authorization', `Bearer ${token}`)
-  //     }
-  //     return headers
-  //   }
-  // }),
   tagTypes: ['Project', 'Project Detail', 'Task Detail'],
   endpoints: build => ({
     getAllProjects: build.query({
@@ -96,7 +85,9 @@ export const projectApi = createApi({
       query: id => ({
         url: 'Project/getTaskDetail',
         params: { taskId: id }
-      })
+      }),
+      providesTags: result =>
+        result ? [{ type: 'Task Detail', id: result.content.taskId }] : []
     }),
     updateTask: build.mutation({
       query: body => ({
@@ -105,7 +96,8 @@ export const projectApi = createApi({
         data: body
       }),
       invalidatesTags: (result, error, body) => [
-        { type: 'Project Detail', id: body.projectId }
+        { type: 'Project Detail', id: body.projectId },
+        { type: 'Task Detail', id: body.taskId }
       ]
     }),
     removeTask: build.mutation({
@@ -113,6 +105,14 @@ export const projectApi = createApi({
         url: 'Project/removeTask',
         method: 'DELETE',
         params: { taskId: id }
+      }),
+      invalidatesTags: [{ type: 'Project Detail', id: 'LIST' }]
+    }),
+    updateStatus: build.mutation({
+      query: body => ({
+        url: 'Project/updateStatus',
+        method: 'PUT',
+        data: body
       }),
       invalidatesTags: [{ type: 'Project Detail', id: 'LIST' }]
     })
@@ -130,5 +130,6 @@ export const {
   useCreateTaskMutation,
   useGetTaskDetailQuery,
   useUpdateTaskMutation,
-  useRemoveTaskMutation
+  useRemoveTaskMutation,
+  useUpdateStatusMutation
 } = projectApi

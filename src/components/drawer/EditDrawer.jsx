@@ -3,11 +3,11 @@ import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { useUpdateProjectMutation } from '../../store/api/project.service'
-import { useGetProjectsCategoryQuery } from '../../store/api/projectCategory.service'
-import { closeDrawer } from '../../store/reducer/drawer.slice'
+import { useUpdateProjectMutation } from '../../redux/api/project.service'
+import { useGetProjectsCategoryQuery } from '../../redux/api/projectCategory.service'
+import { closeDrawer } from '../../redux/reducer/drawer.slice'
 import DrawerTemplate from '../../template/DrawerTemplate'
-import EditorComponent from '../editor/EditorComponent'
+import EditorForm from '../editor/EditorForm'
 import { FormItem } from '../form/FormItem'
 
 function EditDrawer({ projectDetail }) {
@@ -59,7 +59,7 @@ function EditDrawer({ projectDetail }) {
             }))}
           />
         </FormItem>
-        <EditorComponent control={control} name='description' label='Description' />
+        <EditorForm control={control} name='description' label='Description' />
       </Form>
     </DrawerTemplate>
   )

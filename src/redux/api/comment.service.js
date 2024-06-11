@@ -8,7 +8,10 @@ export const commentApi = createApi({
   tagTypes: ['Comment'],
   endpoints: build => ({
     getAllComments: build.query({
-      query: () => 'Comment/getAllComment',
+      query: id => ({
+        url: 'Comment/getAll',
+        params: { taskId: id }
+      }),
       providesTags: result =>
         result
           ? [
@@ -28,9 +31,11 @@ export const commentApi = createApi({
     updateComment: build.mutation({
       query: body => ({
         url: 'Comment/updateComment',
-        params: { commentId: body.id },
         method: 'PUT',
-        data: body.data
+        params: {
+          id: body.id,
+          contentComment: body.comment
+        }
       }),
       invalidatesTags: (result, error, body) => [{ type: 'Comment', id: body.id }]
     }),
@@ -38,7 +43,7 @@ export const commentApi = createApi({
       query: id => ({
         url: 'Comment/deleteComment',
         method: 'DELETE',
-        params: { commentID: id }
+        params: { idComment: id }
       }),
       invalidatesTags: (result, error, id) => [{ type: 'Comment', id }]
     })

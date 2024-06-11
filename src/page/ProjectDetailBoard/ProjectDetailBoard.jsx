@@ -1,28 +1,40 @@
-import { Avatar, Badge, Breadcrumb, Card, Col, Flex, Input, Row } from 'antd'
+import { Avatar, Breadcrumb, Input } from 'antd'
 import { useState } from 'react'
+import { DragDropContext } from 'react-beautiful-dnd'
 import { useParams } from 'react-router-dom'
 
-import TaskDetailModal from '../../components/modal/TaskDetailModal'
+import TaskDetail from '../../components/modal/TaskDetail'
 import {
   useGetProjectDetailQuery,
-  useGetTaskDetailQuery
-} from '../../store/api/project.service'
-
-const { Ribbon } = Badge
-
-const taskColorMap = {
-  1: '#ccd5eb',
-  2: '#fb923c',
-  3: '#3399ff',
-  4: '#90ee90'
-}
+  useGetTaskDetailQuery,
+  useUpdateStatusMutation
+} from '../../redux/api/project.service'
+import TaskColumn from './TaskColumn'
 
 function ProjectDetailBoard() {
   const [open, setOpen] = useState(false)
   const [taskID, setTaskID] = useState(null)
+
   const { projectID } = useParams()
+
   const { data: projectDetail } = useGetProjectDetailQuery(projectID)
   const { data: taskDetail } = useGetTaskDetailQuery(taskID, { skip: !open })
+  const [updateStatus] = useUpdateStatusMutation()
+
+  // Handle drag and drop task
+  const handeDragEnd = result => {
+    let { destination, source, draggableId } = result
+
+    if (!destination) return
+
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    )
+      return
+
+    updateStatus({ taskId: draggableId, statusId: destination.droppableId })
+  }
 
   return (
     <div>
@@ -67,91 +79,30 @@ function ProjectDetailBoard() {
           </span>
         </div>
       </div>
-      <Row gutter={16}>
-        {projectDetail?.content?.lstTask.map(task => (
-          <>
-            <Col span={6} key={task.statusId}>
-              <Ribbon
-                text={task.lstTaskDeTail.length}
-                color={taskColorMap[task.statusId]}
-              >
-                <Card
-                  title={<span className='text-xs'>{task.statusName}</span>}
-                  bordered={false}
-                  className='bg-gray-100'
-                  size='small'
-                >
-                  {task.lstTaskDeTail.map(taskDetail => (
-                    <Card
-                      key={taskDetail.taskId}
-                      className='my-3.5'
-                      hoverable
-                      size='small'
-                      onClick={() => {
-                        setOpen(true)
-                        setTaskID(taskDetail.taskId)
-                      }}
-                    >
-                      <p className='py-2 font-bold'>{taskDetail.taskName}</p>
-                      <Flex justify='space-between'>
-                        <div>
-                          {taskDetail.taskTypeDetail.id === 1 ? (
-                            <i className='fa fa-bug mr-2 text-red-400' />
-                          ) : (
-                            <i className='fa fa-bookmark mr-2 text-green-500' />
-                          )}
-                          {taskDetail.priorityTask.priorityId === 1 ? (
-                            <i className='fa fa-arrow-up text-red-500' />
-                          ) : taskDetail.priorityTask.priorityId === 2 ? (
-                            <i className='fa fa-arrow-up text-orange-400' />
-                          ) : taskDetail.priorityTask.priorityId === 3 ? (
-                            <i className='fa fa-arrow-down text-green-500' />
-                          ) : taskDetail.priorityTask.priorityId === 4 ? (
-                            <i className='fa fa-arrow-down text-green-300' />
-                          ) : null}
-                        </div>
-                        <Avatar.Group
-                          maxCount={2}
-                          maxStyle={{
-                            color: '#f56a00',
-                            backgroundColor: '#fde3cf',
-                            fontSize: '13px'
-                          }}
-                          max={{
-                            style: {
-                              color: '#f56a00',
-                              backgroundColor: '#fde3cf',
-                              fontSize: '13px'
-                            },
-                            count: '2'
-                          }}
-                          size={25}
-                        >
-                          {taskDetail.assigness.map(member => (
-                            <Avatar
-                              className='cursor-pointer hover:-translate-y-1 transition-transform duration-200'
-                              key={member.userId}
-                              src={member.avatar}
-                              size={25}
-                            />
-                          ))}
-                        </Avatar.Group>
-                      </Flex>
-                    </Card>
-                  ))}
-                </Card>
-              </Ribbon>
-            </Col>
-            <TaskDetailModal
-              open={open}
+
+      {/*// Drag and drop task board*/}
+      <div className='grid grid-cols-4 gap-6'>
+        <DragDropContext onDragEnd={handeDragEnd}>
+          {projectDetail?.content?.lstTask.map(task => (
+            <TaskColumn
+              key={task.statusId}
+              task={task}
               setOpen={setOpen}
-              taskDetail={taskDetail?.content}
-              members={projectDetail?.content?.members}
-              projectId={projectID}
+              setTaskID={setTaskID}
             />
-          </>
-        ))}
-      </Row>
+          ))}
+        </DragDropContext>
+      </div>
+
+      {open && (
+        <TaskDetail
+          open={open}
+          setOpen={setOpen}
+          taskDetail={taskDetail?.content}
+          members={projectDetail?.content?.members}
+          projectId={projectID}
+        />
+      )}
     </div>
   )
 }

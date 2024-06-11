@@ -1,7 +1,7 @@
 import { Button, Drawer, Space } from 'antd'
 import { useDispatch } from 'react-redux'
 
-import { closeDrawer } from '../store/reducer/drawer.slice'
+import { closeDrawer } from '../redux/reducer/drawer.slice'
 
 function DrawerTemplate({ children, onSubmitCallback, placement, title, open }) {
   const dispatch = useDispatch()

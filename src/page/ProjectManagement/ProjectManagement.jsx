@@ -24,17 +24,20 @@ import {
   useDeleteProjectMutation,
   useGetAllProjectsQuery,
   useRemoveUserFromProjectMutation
-} from '../../store/api/project.service'
-import { useGetUserQuery } from '../../store/api/users.service'
-import { openDrawer } from '../../store/reducer/drawer.slice'
-import { setProjectDetail } from '../../store/reducer/project.slice'
+} from '../../redux/api/project.service'
+import { useGetUserQuery } from '../../redux/api/users.service'
+import { openDrawer } from '../../redux/reducer/drawer.slice'
+import { setProjectDetail } from '../../redux/reducer/project.slice'
 
 function ProjectManagement() {
   const [sortedInfo, setSortedInfo] = useState({})
   const [userKeyword, setUserKeyword] = useState('')
+
   const { projectDetail } = useSelector(state => state.project)
   const dispatch = useDispatch()
+
   const debouncedSearchTerm = useDebounce(userKeyword, 1000)
+
   const { data: projectList, isFetching } = useGetAllProjectsQuery()
   const { data: user } = useGetUserQuery(debouncedSearchTerm)
   const [deleteProject] = useDeleteProjectMutation()
@@ -56,11 +59,13 @@ function ProjectManagement() {
     })
   }
 
+  // dispatch action to open drawer and set project detail in store
   const handleClick = projectDetail => {
     dispatch(openDrawer('editProject'))
     dispatch(setProjectDetail(projectDetail))
   }
 
+  //delete project
   const handleDeleteProject = id => {
     deleteProject(id)
   }

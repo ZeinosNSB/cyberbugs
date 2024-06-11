@@ -1,6 +1,6 @@
-import { useTheme } from '../../hooks/useTheme'
+import { useTheme } from '../../../hooks/useTheme'
 
-export const UserSignInStyles = () => {
+export const SignInStyles = () => {
   const { token, screens } = useTheme()
 
   return {

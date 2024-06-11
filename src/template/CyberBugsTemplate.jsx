@@ -1,14 +1,10 @@
 import { Layout, Menu } from 'antd'
 import { useMemo, useState } from 'react'
-import { Link, Route, Routes, useLocation } from 'react-router-dom'
+import { Link, Outlet, useLocation } from 'react-router-dom'
 
 import logo from '../assets/img/download.jfif'
 import SideBar from '../components/sidebar/SideBar'
 import { useTheme } from '../hooks/useTheme'
-import CreateProject from '../page/CreateProject'
-import CyberBoard from '../page/CyberBoard'
-import ProjectDetailBoard from '../page/ProjectDetailBoard'
-import ProjectManagement from '../page/ProjectManagement'
 
 const { Sider, Content } = Layout
 
@@ -27,6 +23,11 @@ const menuItems = [
     key: '/project-management',
     icon: <i className='fa fa-folder-open' />,
     label: <Link to='/project-management'>Project Management</Link>
+  },
+  {
+    key: '/user-management',
+    icon: <i className='fa fa-user-cog' />,
+    label: <Link to='/user-management'>User Management</Link>
   },
   {
     type: 'divider'
@@ -106,12 +107,7 @@ function CyberBugsTemplate() {
               borderRadius: token.borderRadiusLG
             }}
           >
-            <Routes>
-              <Route path='cyberbugs' element={<CyberBoard />} />
-              <Route path='cyberbugs/:projectID' element={<ProjectDetailBoard />} />
-              <Route path='create-project' element={<CreateProject />} />
-              <Route path='project-management' element={<ProjectManagement />} />
-            </Routes>
+            <Outlet />
           </Content>
         </Layout>
       </Layout>

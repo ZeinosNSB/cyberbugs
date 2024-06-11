@@ -1,21 +1,32 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
+import SignIn from './page/Account/SignIn'
+import CreateProject from './page/CreateProject'
+import CyberBoard from './page/CyberBoard'
 import Home from './page/Home'
 import PageNotFound from './page/PageNotFound'
-import UserSignIn from './page/UserSignIn'
+import ProjectDetailBoard from './page/ProjectDetailBoard'
+import ProjectManagement from './page/ProjectManagement'
+import UserManagement from './page/UserManagement'
+import AccountTemplate from './template/AccountTemplate'
 import CyberBugsTemplate from './template/CyberBugsTemplate'
-import UsersSignTemplate from './template/UsersSignTemplate'
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<Home />} />
-        <Route element={<UsersSignTemplate />}>
-          <Route path='signin' element={<UserSignIn />} />
+        <Route element={<AccountTemplate />}>
+          <Route path='signin' element={<SignIn />} />
           <Route path='signup' element={<h1>Register</h1>} />
         </Route>
-        <Route path='/*' element={<CyberBugsTemplate />} />
+        <Route element={<CyberBugsTemplate />}>
+          <Route path='cyberbugs' element={<CyberBoard />} />
+          <Route path='cyberbugs/:projectID' element={<ProjectDetailBoard />} />
+          <Route path='create-project' element={<CreateProject />} />
+          <Route path='project-management' element={<ProjectManagement />} />
+          <Route path='user-management' element={<UserManagement />} />
+        </Route>
         <Route path='*' element={<PageNotFound />} />
       </Routes>
     </BrowserRouter>

@@ -1,11 +1,11 @@
-import './TaskDetailModal.css'
+import './TaskDetail.css'
 
 import { DeleteOutlined, LinkOutlined, SendOutlined } from '@ant-design/icons'
-import { Editor } from '@tinymce/tinymce-react'
 import {
   Avatar,
   Button,
   Col,
+  Input,
   InputNumber,
   Modal,
   Popconfirm,
@@ -19,16 +19,24 @@ import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import {
+  useDeleteCommentMutation,
+  useGetAllCommentsQuery,
+  useInsertCommentMutation,
+  useUpdateCommentMutation
+} from '../../../redux/api/comment.service'
+import {
   useRemoveTaskMutation,
   useUpdateTaskMutation
-} from '../../store/api/project.service'
+} from '../../../redux/api/project.service'
+import { USER_LOGIN } from '../../../utils/settingSystems'
+import EditorCustom from '../../editor/EditorCustom'
 
 const iconTask = {
   1: 'fa fa-bug text-red-400',
   2: 'fa fa-bookmark text-green-500'
 }
 
-function TaskDetailModal({ open, setOpen, taskDetail, members, projectId }) {
+function TaskDetail({ open, setOpen, taskDetail, members, projectId }) {
   const [data, setData] = useState({
     typeId: null,
     taskId: null,
@@ -38,21 +46,32 @@ function TaskDetailModal({ open, setOpen, taskDetail, members, projectId }) {
     priorityId: null,
     listUserAsign: [],
     originalEstimate: null,
-    timeSpent: null,
-    timeRemaining: null,
+    timeTrackingSpent: null,
+    timeTrackingRemaining: null,
     description: '',
     originalDescription: ''
   })
-  const [visibleEditor, setVisibleEditor] = useState(false)
+  const [visibleEditorDescription, setVisibleEditorDescription] = useState(false)
+  const [visibleInsertComment, setVisibleInsertComment] = useState(false)
+  const [visibleEditorCommentId, setVisibleEditorCommentId] = useState(null)
   const [isDataChanged, setIsDataChanged] = useState(false)
+  const [addComment, setAddComment] = useState('')
+  const [editComment, setEditComment] = useState('')
 
   const { statusArr } = useSelector(state => state.status)
   const { priorityArr } = useSelector(state => state.priority)
   const { taskTypeArr } = useSelector(state => state.task)
 
-  const [updateTask] = useUpdateTaskMutation()
   const [removeTask] = useRemoveTaskMutation()
+  const [updateTask] = useUpdateTaskMutation()
+  const { data: allComments } = useGetAllCommentsQuery(taskDetail?.taskId, {
+    skip: !taskDetail
+  })
+  const [insertComment] = useInsertCommentMutation()
+  const [updateComment] = useUpdateCommentMutation()
+  const [deleteComment] = useDeleteCommentMutation()
 
+  //set initial data after get taskDetail (call api)
   useEffect(() => {
     taskDetail &&
       setData({
@@ -64,13 +83,14 @@ function TaskDetailModal({ open, setOpen, taskDetail, members, projectId }) {
         statusId: taskDetail?.statusId,
         taskId: taskDetail?.taskId,
         taskName: taskDetail?.taskName,
-        timeRemaining: taskDetail?.timeTrackingRemaining,
-        timeSpent: taskDetail?.timeTrackingSpent,
+        timeTrackingRemaining: taskDetail?.timeTrackingRemaining,
+        timeTrackingSpent: taskDetail?.timeTrackingSpent,
         typeId: taskDetail?.taskTypeDetail?.id,
         originalDescription: taskDetail?.description
       })
   }, [taskDetail, projectId])
 
+  //set new data when change value in form
   const handleChange = (value, name) => {
     setData(prev => ({
       ...prev,
@@ -79,13 +99,15 @@ function TaskDetailModal({ open, setOpen, taskDetail, members, projectId }) {
     setIsDataChanged(true)
   }
 
-  //call api updateTask after data changed
-  useEffect(() => {
+  //close modal and update task
+  const handleCloseModal = () => {
+    setOpen(false)
+    setVisibleEditorDescription(false)
     if (isDataChanged) {
       updateTask(data)
       setIsDataChanged(false)
     }
-  }, [data, updateTask, isDataChanged])
+  }
 
   return (
     <Modal
@@ -138,53 +160,29 @@ function TaskDetailModal({ open, setOpen, taskDetail, members, projectId }) {
       }
       centered
       open={open}
-      onCancel={() => setOpen(false)}
+      onCancel={handleCloseModal}
       width={1000}
       destroyOnClose
       footer={null}
     >
       <Row>
+        {/* Description and Comment */}
         <Col span={16}>
+          {/* Description */}
           <h4 className='font-bold mb-2'>Description</h4>
           <div className='mb-2'>
-            {visibleEditor && (
+            {visibleEditorDescription && (
               <>
-                <Editor
-                  apiKey='xioemkmdlxsadn0uku2zmyb2vvcvprt4x37wotzhaf6purql'
-                  value={data.description}
-                  onEditorChange={value => handleChange(value, 'description')}
-                  init={{
-                    height: '300',
-                    width: '95%',
-                    menubar: false,
-                    initialValue: '',
-                    plugins: [
-                      'advlist',
-                      'anchor',
-                      'autolink',
-                      'help',
-                      'image',
-                      'link',
-                      'lists',
-                      'searchreplace',
-                      'table',
-                      'wordcount'
-                    ],
-                    toolbar:
-                      'undo redo | blocks | ' +
-                      'bold italic forecolor | alignleft aligncenter ' +
-                      'alignright alignjustify | bullist numlist outdent indent | ' +
-                      'removeformat | help',
-                    content_style:
-                      'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-                    license_key: 'gpl'
-                  }}
+                <EditorCustom
+                  data={data.description}
+                  handleChange={handleChange}
+                  name='description'
                 />
                 <Space className='my-4'>
                   <Button
                     type='primary'
                     onClick={() => {
-                      setVisibleEditor(false)
+                      setVisibleEditorDescription(false)
                       setData({ ...data, originalDescription: data.description })
                     }}
                   >
@@ -193,7 +191,7 @@ function TaskDetailModal({ open, setOpen, taskDetail, members, projectId }) {
                   <Button
                     type='dashed'
                     onClick={() => {
-                      setVisibleEditor(false)
+                      setVisibleEditorDescription(false)
                       setData({ ...data, description: data.originalDescription })
                     }}
                   >
@@ -202,10 +200,10 @@ function TaskDetailModal({ open, setOpen, taskDetail, members, projectId }) {
                 </Space>
               </>
             )}
-            {!visibleEditor && (
+            {!visibleEditorDescription && (
               <div
                 className='cursor-pointer'
-                onClick={() => setVisibleEditor(!visibleEditor)}
+                onClick={() => setVisibleEditorDescription(true)}
               >
                 {data.description === data.originalDescription
                   ? parse(data.originalDescription)
@@ -213,8 +211,125 @@ function TaskDetailModal({ open, setOpen, taskDetail, members, projectId }) {
               </div>
             )}
           </div>
+          {/* Comment */}
           <h4 className='font-bold mb-2'>Comment</h4>
+          {/*Insert Comment*/}
+          <div className='flex gap-4 my-4'>
+            <Avatar
+              style={{ width: '32px', height: '32px', objectFit: 'cover' }}
+              src={JSON.parse(localStorage.getItem(USER_LOGIN))?.avatar}
+            />
+            {visibleInsertComment && (
+              <div className='w-full'>
+                <EditorCustom
+                  data={addComment}
+                  handleChange={value => setAddComment(value)}
+                  name='contentComment'
+                />{' '}
+                <Space className='mt-3'>
+                  <Button
+                    type='primary'
+                    onClick={() => {
+                      insertComment({
+                        contentComment: addComment,
+                        taskId: taskDetail.taskId
+                      })
+                      setVisibleInsertComment(false)
+                    }}
+                  >
+                    Save
+                  </Button>
+                  <Button
+                    type='text'
+                    onClick={() => {
+                      setVisibleInsertComment(false)
+                      setAddComment('')
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </Space>
+              </div>
+            )}
+            {!visibleInsertComment && (
+              <Input
+                rootClassName='w-5/6'
+                placeholder='Add a comment...'
+                onClick={() => setVisibleInsertComment(true)}
+              />
+            )}
+          </div>
+          {/*Edit and Delete Comment*/}
+          {allComments?.content.map(comment => (
+            <div className='flex gap-4 my-4' key={comment?.id}>
+              <Avatar src={comment?.user?.avatar} />
+              {visibleEditorCommentId === comment.id && (
+                <div className='w-full'>
+                  <EditorCustom
+                    data={editComment}
+                    handleChange={value => setEditComment(value)}
+                    name='contentComment'
+                  />
+                  <Space className='mt-3'>
+                    <Button
+                      type='primary'
+                      onClick={() => {
+                        setVisibleEditorCommentId(null)
+                        editComment !== comment?.contentComment &&
+                          updateComment({
+                            id: comment.id,
+                            comment: editComment
+                          })
+                      }}
+                    >
+                      Save
+                    </Button>
+                    <Button
+                      type='text'
+                      onClick={() => {
+                        setVisibleEditorCommentId(null)
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                  </Space>
+                </div>
+              )}
+              {visibleEditorCommentId !== comment.id && (
+                <div>
+                  <p className='font-bold'>{comment?.user?.name}</p>
+                  <div>{parse(comment?.contentComment)}</div>
+                  <div className='flex text-xs text-neutral-400 cursor-pointer mt-3'>
+                    <p
+                      className='pr-3 hover:text-neutral-700'
+                      onClick={() => {
+                        setVisibleEditorCommentId(comment?.id)
+                        setEditComment(comment?.contentComment)
+                      }}
+                    >
+                      Edit
+                    </p>
+                    <Popconfirm
+                      title='Delete the comment'
+                      description='Are you sure to delete this comment, bro?'
+                      onConfirm={() => {
+                        deleteComment(comment?.id)
+                      }}
+                      okText='Yes'
+                      okType='danger'
+                      cancelText='No'
+                      destroyTooltipOnHide={true}
+                    >
+                      <p className='hover:text-neutral-700'>Delete</p>
+                    </Popconfirm>
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
         </Col>
+
+        {/* Status, Assignees, Priority, Original Estimate, Time Tracking */}
         <Col span={8}>
           <div className='mb-4'>
             <p className='font-bold mb-1'>Status</p>
@@ -276,12 +391,12 @@ function TaskDetailModal({ open, setOpen, taskDetail, members, projectId }) {
           <div className='mb-4'>
             <p className='font-bold'>Time Tracking</p>
             <Slider
-              value={Number(data.timeSpent)}
-              max={Number(data.timeSpent) + Number(data.timeRemaining)}
+              value={Number(data.timeTrackingSpent)}
+              max={Number(data.timeTrackingSpent) + Number(data.timeTrackingRemaining)}
             />
             <div className='flex justify-between'>
-              <span>{data.timeSpent}h logged</span>
-              <span>{data.timeRemaining}h remaining</span>
+              <span>{data.timeTrackingSpent}h logged</span>
+              <span>{data.timeTrackingRemaining}h remaining</span>
             </div>
           </div>
 
@@ -291,8 +406,8 @@ function TaskDetailModal({ open, setOpen, taskDetail, members, projectId }) {
               <InputNumber
                 min={0}
                 className='w-full'
-                value={data.timeSpent}
-                onChange={value => handleChange(value, 'timeSpent')}
+                value={data.timeTrackingSpent}
+                onChange={value => handleChange(value, 'timeTrackingSpent')}
               />
             </Col>
             <Col span={12}>
@@ -300,8 +415,8 @@ function TaskDetailModal({ open, setOpen, taskDetail, members, projectId }) {
               <InputNumber
                 min={0}
                 className='w-full'
-                value={data.timeRemaining}
-                onChange={value => handleChange(value, 'timeRemaining')}
+                value={data.timeTrackingRemaining}
+                onChange={value => handleChange(value, 'timeTrackingRemaining')}
               />
             </Col>
           </Row>
@@ -311,4 +426,4 @@ function TaskDetailModal({ open, setOpen, taskDetail, members, projectId }) {
   )
 }
 
-export default TaskDetailModal
+export default TaskDetail

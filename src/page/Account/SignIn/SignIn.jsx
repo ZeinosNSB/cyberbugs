@@ -8,16 +8,16 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { Button, Checkbox, Divider, Form, Input, Space, Typography } from 'antd'
 import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import * as yup from 'yup'
 
-import { FormItem } from '../../components/form/FormItem'
-import { useSignInMutation } from '../../store/api/users.service'
-import { setUserSignIn } from '../../store/reducer/users.slice'
-import { TOKEN, USER_LOGIN } from '../../utils/settingSystems'
-import { UserSignInStyles } from './UserSignInStyles'
+import { FormItem } from '../../../components/form/FormItem'
+import { useSignInMutation } from '../../../redux/api/users.service'
+import { setUserSignIn } from '../../../redux/reducer/users.slice'
+import { TOKEN, USER_LOGIN } from '../../../utils/settingSystems'
+import { SignInStyles } from './SignInStyles'
 
-const { Text, Title, Link } = Typography
+const { Text, Title } = Typography
 
 const schema = yup
   .object({
@@ -27,8 +27,8 @@ const schema = yup
   })
   .required()
 
-export default function UserSignIn() {
-  const styles = UserSignInStyles()
+export default function SignIn() {
+  const styles = SignInStyles()
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [signIn] = useSignInMutation()
@@ -74,7 +74,7 @@ export default function UserSignIn() {
             <FormItem control={control} name='remember' valuePropName='checked' noStyle>
               <Checkbox>Remember me</Checkbox>
             </FormItem>
-            <Link href='' style={styles.formForgot}>
+            <Link to='*' style={styles.formForgot} className='text-amber-600'>
               Forgot password?
             </Link>
           </Form.Item>
@@ -85,7 +85,9 @@ export default function UserSignIn() {
             <Divider plain>Or continue with</Divider>
             <div style={styles.footer}>
               <Text style={styles.text}>Don&apos;t have an account?</Text>
-              <Link href=''>Sign up now</Link>
+              <Link to='/signup' className='text-amber-600'>
+                Sign up now
+              </Link>
             </div>
             <div style={styles.icon}>
               <Space>

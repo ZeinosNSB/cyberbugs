@@ -3,19 +3,19 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { useGetPrioritiesQuery } from '../../store/api/priority.service'
+import { useGetPrioritiesQuery } from '../../redux/api/priority.service'
 import {
   useCreateTaskMutation,
   useGetAllProjectsQuery
-} from '../../store/api/project.service'
-import { useGetStatusQuery } from '../../store/api/status.service'
-import { useGetTaskTypesQuery } from '../../store/api/tasktype.service'
-import { closeDrawer } from '../../store/reducer/drawer.slice'
-import { setPriorityArr } from '../../store/reducer/priority.slice'
-import { setStatusArr } from '../../store/reducer/status.slice'
-import { setTaskTypeArr } from '../../store/reducer/task.slice'
+} from '../../redux/api/project.service'
+import { useGetStatusQuery } from '../../redux/api/status.service'
+import { useGetTaskTypesQuery } from '../../redux/api/tasktype.service'
+import { closeDrawer } from '../../redux/reducer/drawer.slice'
+import { setPriorityArr } from '../../redux/reducer/priority.slice'
+import { setStatusArr } from '../../redux/reducer/status.slice'
+import { setTaskTypeArr } from '../../redux/reducer/task.slice'
 import DrawerTemplate from '../../template/DrawerTemplate'
-import EditorComponent from '../editor/EditorComponent'
+import EditorForm from '../editor/EditorForm'
 import { FormItem } from '../form/FormItem'
 
 function CreateTaskDrawer() {
@@ -24,13 +24,16 @@ function CreateTaskDrawer() {
   const [projectMembers, setProjectMembers] = useState([])
   const [timeSpent, setTimeSpent] = useState(0)
   const [timeRemaining, setTimeRemaining] = useState(0)
+
   const { currentDrawer } = useSelector(state => state.drawer)
   const dispatch = useDispatch()
-  const { data: projects } = useGetAllProjectsQuery()
+
+  const { data: projects } = useGetAllProjectsQuery({}, { skip: !currentDrawer })
   const { data: priority } = useGetPrioritiesQuery()
   const { data: status } = useGetStatusQuery()
   const { data: taskType } = useGetTaskTypesQuery()
   const [createTask] = useCreateTaskMutation()
+
   const { control, handleSubmit, setValue } = useForm({
     defaultValues: {
       originalEstimate: 0,
@@ -39,6 +42,8 @@ function CreateTaskDrawer() {
     }
   })
 
+  //When currentDrawer is equal to 'createTask', the drawer will be open, see component/sidebar/SideBar.jsx dispatch
+  // currentDrawer equal to 'createTask' when user click on 'Create Task' button
   const isOpen = currentDrawer === 'createTask'
 
   // set default value for select
@@ -54,13 +59,14 @@ function CreateTaskDrawer() {
     selectedProject && setProjectMembers(selectedProject.members)
   }, [projectID, projects])
 
-  //dispatch status and priority id to store
+  //dispatch status, taskType and priority id to redux
   useEffect(() => {
     status && dispatch(setStatusArr(status?.content))
     priority && dispatch(setPriorityArr(priority?.content))
     taskType && dispatch(setTaskTypeArr(taskType?.content))
   }, [dispatch, status, priority, taskType])
 
+  //Create task and close drawer when user submit form
   const onSubmit = data => {
     createTask(data)
     dispatch(closeDrawer())
@@ -164,7 +170,7 @@ function CreateTaskDrawer() {
             }))}
           />
         </FormItem>
-        <EditorComponent control={control} name='description' label='Description' />
+        <EditorForm control={control} name='description' label='Description' />
       </Form>
     </DrawerTemplate>
   )
