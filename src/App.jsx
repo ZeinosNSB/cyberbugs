@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 import SignIn from './page/Account/SignIn'
+import SignUp from './page/Account/SignUp'
 import CreateProject from './page/CreateProject'
 import CyberBoard from './page/CyberBoard'
 import Home from './page/Home'
@@ -18,7 +19,7 @@ function App() {
         <Route path='/' element={<Home />} />
         <Route element={<AccountTemplate />}>
           <Route path='signin' element={<SignIn />} />
-          <Route path='signup' element={<h1>Register</h1>} />
+          <Route path='signup' element={<SignUp />} />
         </Route>
         <Route element={<CyberBugsTemplate />}>
           <Route path='cyberbugs' element={<CyberBoard />} />

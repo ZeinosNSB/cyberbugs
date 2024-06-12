@@ -18,7 +18,7 @@ import DrawerTemplate from '../../template/DrawerTemplate'
 import EditorForm from '../editor/EditorForm'
 import { FormItem } from '../form/FormItem'
 
-function CreateTaskDrawer() {
+function CreateTask() {
   const [selectedItems, setSelectedItems] = useState([])
   const [projectID, setProjectID] = useState(null)
   const [projectMembers, setProjectMembers] = useState([])
@@ -28,7 +28,11 @@ function CreateTaskDrawer() {
   const { currentDrawer } = useSelector(state => state.drawer)
   const dispatch = useDispatch()
 
-  const { data: projects } = useGetAllProjectsQuery({}, { skip: !currentDrawer })
+  //When currentDrawer is equal to 'createTask', the drawer will be open, see component/sidebar/SideBar.jsx dispatch
+  // currentDrawer equal to 'createTask' when user click on 'Create Task' button
+  const isOpen = currentDrawer === 'createTask'
+
+  const { data: projects } = useGetAllProjectsQuery({}, { skip: !isOpen })
   const { data: priority } = useGetPrioritiesQuery()
   const { data: status } = useGetStatusQuery()
   const { data: taskType } = useGetTaskTypesQuery()
@@ -41,10 +45,6 @@ function CreateTaskDrawer() {
       timeTrackingRemaining: 0
     }
   })
-
-  //When currentDrawer is equal to 'createTask', the drawer will be open, see component/sidebar/SideBar.jsx dispatch
-  // currentDrawer equal to 'createTask' when user click on 'Create Task' button
-  const isOpen = currentDrawer === 'createTask'
 
   // set default value for select
   useEffect(() => {
@@ -176,4 +176,4 @@ function CreateTaskDrawer() {
   )
 }
 
-export default CreateTaskDrawer
+export default CreateTask

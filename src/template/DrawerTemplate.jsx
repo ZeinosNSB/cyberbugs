@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 
 import { closeDrawer } from '../redux/reducer/drawer.slice'
 
-function DrawerTemplate({ children, onSubmitCallback, placement, title, open }) {
+function DrawerTemplate({ children, onSubmitCallback, placement, title, open, width }) {
   const dispatch = useDispatch()
 
   const onClose = () => {
@@ -19,7 +19,7 @@ function DrawerTemplate({ children, onSubmitCallback, placement, title, open }) 
         onClose={onClose}
         open={open}
         key='left'
-        width={720}
+        width={width || 720}
         destroyOnClose={true}
         extra={
           <Space>

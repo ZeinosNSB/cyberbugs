@@ -13,17 +13,17 @@ import priorityReducer from './reducer/priority.slice'
 import projectReducer from './reducer/project.slice'
 import statusReducer from './reducer/status.slice'
 import taskReducer from './reducer/task.slice'
-import usersReducer from './reducer/users.slice'
+import userReducer from './reducer/user.slice'
 
 const store = configureStore({
   reducer: {
-    users: usersReducer,
     drawer: drawerReducer,
     project: projectReducer,
     notification: notificationReducer,
     status: statusReducer,
     priority: priorityReducer,
     task: taskReducer,
+    user: userReducer,
     [usersApi.reducerPath]: usersApi.reducer,
     [projectCategoryApi.reducerPath]: projectCategoryApi.reducer,
     [projectApi.reducerPath]: projectApi.reducer,

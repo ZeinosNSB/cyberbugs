@@ -10,11 +10,17 @@ import DrawerTemplate from '../../template/DrawerTemplate'
 import EditorForm from '../editor/EditorForm'
 import { FormItem } from '../form/FormItem'
 
-function EditDrawer({ projectDetail }) {
+function EditProject() {
   const { currentDrawer } = useSelector(state => state.drawer)
+  const { projectDetail } = useSelector(state => state.project)
   const dispatch = useDispatch()
+
   const { control, handleSubmit, setValue } = useForm()
-  const { data: projectCategory } = useGetProjectsCategoryQuery()
+  const { data: projectCategory } = useGetProjectsCategoryQuery(
+    {},
+    { skip: !currentDrawer }
+  )
+
   const [updateProject] = useUpdateProjectMutation()
 
   const isOpen = currentDrawer === 'editProject'
@@ -26,10 +32,10 @@ function EditDrawer({ projectDetail }) {
 
   useEffect(() => {
     if (projectDetail) {
-      setValue('projectID', projectDetail?.id)
-      setValue('projectName', projectDetail?.projectName)
-      setValue('categoryId', projectDetail?.categoryId)
-      setValue('description', projectDetail?.description)
+      setValue('projectID', projectDetail.id)
+      setValue('projectName', projectDetail.projectName)
+      setValue('categoryId', projectDetail.categoryId)
+      setValue('description', projectDetail.description)
     }
   }, [projectDetail, setValue])
 
@@ -65,4 +71,4 @@ function EditDrawer({ projectDetail }) {
   )
 }
 
-export default EditDrawer
+export default EditProject

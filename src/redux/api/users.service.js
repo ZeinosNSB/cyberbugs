@@ -14,6 +14,13 @@ export const usersApi = createApi({
         data: body
       })
     }),
+    signUp: build.mutation({
+      query: body => ({
+        url: 'Users/signup',
+        method: 'POST',
+        data: body
+      })
+    }),
     getUser: build.query({
       query: keyword => ({
         url: 'Users/getUser',
@@ -22,12 +29,34 @@ export const usersApi = createApi({
       providesTags: result =>
         result
           ? [
-              ...result.content.map(({ id }) => ({ type: 'Users', id })),
+              ...result.content.map(({ userId }) => ({ type: 'Users', id: userId })),
               { type: 'Users', id: 'LIST' }
             ]
           : [{ type: 'Users', id: 'LIST' }]
+    }),
+    editUser: build.mutation({
+      query: body => ({
+        url: 'Users/editUser',
+        method: 'PUT',
+        data: body
+      }),
+      invalidatesTags: (result, error, { id }) => [{ type: 'Users', id }]
+    }),
+    deleteUser: build.mutation({
+      query: id => ({
+        url: 'Users/deleteUser',
+        method: 'DELETE',
+        params: { id }
+      }),
+      invalidatesTags: (result, error, id) => [{ type: 'Users', id }]
     })
   })
 })
 
-export const { useSignInMutation, useGetUserQuery } = usersApi
+export const {
+  useSignInMutation,
+  useGetUserQuery,
+  useSignUpMutation,
+  useEditUserMutation,
+  useDeleteUserMutation
+} = usersApi

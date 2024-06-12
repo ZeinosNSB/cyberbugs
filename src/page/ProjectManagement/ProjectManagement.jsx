@@ -14,10 +14,10 @@ import {
   Tag
 } from 'antd'
 import { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { NavLink } from 'react-router-dom'
 
-import EditDrawer from '../../components/drawer/EditDrawer'
+import EditProject from '../../components/drawer/EditProject'
 import useDebounce from '../../hooks/useDebounce'
 import {
   useAssignUserProjectMutation,
@@ -33,7 +33,6 @@ function ProjectManagement() {
   const [sortedInfo, setSortedInfo] = useState({})
   const [userKeyword, setUserKeyword] = useState('')
 
-  const { projectDetail } = useSelector(state => state.project)
   const dispatch = useDispatch()
 
   const debouncedSearchTerm = useDebounce(userKeyword, 1000)
@@ -157,9 +156,7 @@ function ProjectManagement() {
               content={
                 <AutoComplete
                   className='w-full'
-                  onChange={value => {
-                    setUserKeyword(value)
-                  }}
+                  onChange={value => setUserKeyword(value)}
                   options={user?.content.map(user => ({
                     label: (
                       <Flex justify='space-between'>
@@ -227,11 +224,7 @@ function ProjectManagement() {
   return (
     <>
       <h1 className='text-2xl py-5'>Project Management</h1>
-      <Space
-        style={{
-          marginBottom: 16
-        }}
-      >
+      <Space style={{ marginBottom: 16 }}>
         <Button onClick={setIDSort} type=''>
           Sort ID
         </Button>
@@ -243,7 +236,7 @@ function ProjectManagement() {
         onChange={handleChange}
         loading={isFetching}
       />
-      <EditDrawer projectDetail={projectDetail} />
+      <EditProject />
     </>
   )
 }

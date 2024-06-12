@@ -2,7 +2,7 @@ import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 import { openDrawer } from '../../redux/reducer/drawer.slice'
-import CreateTaskDrawer from '../drawer/CreateTaskDrawer'
+import CreateTask from '../drawer/CreateTask'
 
 function SideBar() {
   const dispatch = useDispatch()
@@ -39,7 +39,7 @@ function SideBar() {
           ABOUT
         </span>
       </div>
-      <CreateTaskDrawer />
+      <CreateTask />
     </div>
   )
 }
