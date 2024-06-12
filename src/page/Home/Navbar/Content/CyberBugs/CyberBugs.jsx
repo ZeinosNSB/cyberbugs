@@ -12,12 +12,6 @@ function CyberBugs() {
           >
             Board Template
           </NavLink>
-          <NavLink
-            to='cyberbugs/15074'
-            className='block text-sm text-neutral-600 transition-colors hover:text-amber-500'
-          >
-            Project 15074
-          </NavLink>
         </div>
       </div>
     </div>
